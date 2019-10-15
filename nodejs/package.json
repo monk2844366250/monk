@@ -1,0 +1,34 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "fs": "0.0.1-security",
+    "http-errors": "~1.6.3",
+    "mockjs": "^1.0.1-beta3",
+    "mongodb": "^3.3.2",
+    "morgan": "~1.9.1",
+    "path": "^0.12.7"
+  },
+  "description": "hero game",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "2844366250@qq.com"
+  },
+  "keywords": [
+    "game",
+    "hero"
+  ],
+  "author": "monk and xu",
+  "license": "ISC"
+}
