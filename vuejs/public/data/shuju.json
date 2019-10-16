@@ -1,0 +1,72 @@
+
+[
+{
+    "name":"LGD",
+    "game":"1",
+    "record":[{
+        "sd":{"kill":"8","death":"6","assists":"0","guard":"5"},
+        "zd":{"kill":"4","death":"2","assists":"5","guard":"4"},
+        "dy":{"kill":"1","death":"8","assists":"7","guard":"8"},
+        "ad":{"kill":"14","death":"4","assists":"2","guard":"3"},
+        "fz":{"kill":"1","death":"10","assists":"19","guard":"10"}
+    }]
+
+},
+{
+    "name":"RNG",
+    "game":"1",
+    "record":[{
+        "sd":{"kill":"2","death":"6","assists":"12"},
+        "zd":{"kill":"5","death":"2","assists":"5"},
+        "dy":{"kill":"8","death":"8","assists":"7"},
+        "ad":{"kill":"5","death":"4","assists":"2"},
+        "fz":{"kill":"2","death":"10","assists":"19"}
+    }]
+},
+ {
+    "name":"LGD",
+    "game":"2",
+    "record":[{
+        "sd":{"kill":"5","death":"7","assists":"0"},
+        "zd":{"kill":"4","death":"2","assists":"5"},
+        "dy":{"kill":"11","death":"3","assists":"7"},
+        "ad":{"kill":"5","death":"4","assists":"2"},
+        "fz":{"kill":"1","death":"5","assists":"19"}
+    }]
+},
+{
+    "name":"RNG",
+    "game":"2",
+    "record":[{
+        "sd":{"kill":"2","death":"6","assists":"12"},
+        "zd":{"kill":"5","death":"2","assists":"5"},
+        "dy":{"kill":"5","death":"8","assists":"7"},
+        "ad":{"kill":"5","death":"4","assists":"2"},
+        "fz":{"kill":"2","death":"10","assists":"19"}
+    }]
+},
+ {
+    "name":"LGD",
+    "game":"3",
+    "record":[{
+        "sd":{"kill":"8","death":"6","assists":"0"},
+        "zd":{"kill":"4","death":"2","assists":"4"},
+        "dy":{"kill":"6","death":"8","assists":"7"},
+        "ad":{"kill":"4","death":"4","assists":"2"},
+        "fz":{"kill":"3","death":"10","assists":"19"}
+    }]
+},
+{
+    "name":"RNG",
+    "game":"3",
+    "record":[{
+        "sd":{"kill":"2","death":"6","assists":"12"},
+        "zd":{"kill":"5","death":"2","assists":"5"},
+        "dy":{"kill":"8","death":"8","assists":"7"},
+        "ad":{"kill":"5","death":"4","assists":"2"},
+        "fz":{"kill":"2","death":"10","assists":"19"}
+    }]
+}   
+]
+
+
