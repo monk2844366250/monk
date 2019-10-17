@@ -1,30 +1,24 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>
-       |
+      <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
-       |
-      <router-link to="/login">Login</router-link>
-       |
-      <router-link to="/reg">Reg</router-link>
-       |
-      <router-link to="/user">User</router-link>
     </div>
     <router-view/>
   </div>
 </template>
 <script>
+// import axios from './axios'
+
 export default {
-    mounted(){
-    // axios({
-    // url:'/data/shuju.json',   
-    // }).then(
-    //   res=>{ console.log(res.data);return this.listData=window.listData=res.data.data}
-    //   )
-  }
+   
+  components:{
+    // List
+  },
+ 
 }
 </script>
+
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -32,7 +26,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background:url(/data/images/zbg.png) no-repeat center;
 }
+
 #nav {
   padding: 30px;
 }

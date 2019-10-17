@@ -1,31 +1,33 @@
 <template>
   <div class="home">
-
-    <Messages msg="Welcome to Your Vue.js App"></Messages>
-    <div id="heig"></div>
-    <Inform msg="Welcome to Your Vue.js App"></Inform>
-    <div id="heig"></div>
-    <Queue msg="Welcome to Your Vue.js App"></Queue>
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HelloWorld1 msg="Welcome to Your Vue.js App"></HelloWorld1>
+    <HelloWorld2 msg="Welcome to Your Vue.js App"></HelloWorld2>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Messages from '@/components/Messages.vue'
-import Inform from '@/components/Inform.vue'
-import Queue from '@/components/Queue.vue'
+import HelloWorld from '@/components/HelloWorld.vue'
+import HelloWorld1 from '@/components/HelloWorld1.vue'
+import HelloWorld2 from '@/components/HelloWorld2.vue'
 
 export default {
   name: 'home',
   components: {
-    Messages,
-    Inform,
-    Queue
+    HelloWorld,
+    HelloWorld1,
+    HelloWorld2
   }
 }
 </script>
+
 <style scoped>
-  #heig{
-    height: 40px;
-  }
+.home{
+  width:1980px;
+  height:1080px;
+  background:linear-gradient(180deg,rgba(33,41,54,1) 0%,rgba(97,139,181,1) 100%);
+  background:url(/data/images/zbg.png) no-repeat center;
+}
+  
 </style>
