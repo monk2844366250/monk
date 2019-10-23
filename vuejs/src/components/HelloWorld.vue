@@ -19,8 +19,10 @@
       <img src="/data/images/tbg.png" alt="" class="img3">
       <img src="/data/images/HKA.png" alt="" class="img4">
       <img src="/data/images/vs.png" alt="" class="img5">
-      <span class="lf">{{listData[0].game}}</span>
-      <span class="rf">{{listData[0].game}}</span>
+      <!-- <span class="lf">{{listData[0].game}}</span>
+      <span class="rf">{{listData[0].game}}</span> -->
+      <span class="lf">1</span>
+      <span class="rf">0</span>
     </div>
     <div class="big1">
       <img src="/data/images/bgtc1.png" alt="中间" class="cimg1">
@@ -41,8 +43,10 @@
         <img src="/data/images/tbg.png" alt="" class="cimg3">
         <img src="/data/images/HKA.png" alt="" class="cimg4">
         <img src="/data/images/vs.png" alt="" class="cimg5">
-        <span class="cspan2">{{listData[3].game}}</span>
-        <span class="cspan3">{{listData[3].game}}</span>
+        <span class="cspan2">2</span>
+        <span class="cspan3">0</span>
+        <!-- <span class="cspan2">{{listData[3].game}}</span>
+        <span class="cspan3">{{listData[3].game}}</span> -->
     </div>
     <div class="big2">
       <img src="/data/images/bgtr1.png" alt="" class="rimg1">
@@ -69,13 +73,19 @@
         </div>
       </div>
       <img src="/data/images/vs.png" alt="" class="imgs5">
-      <span class="rspan2">{{listData[5].game}}</span>
-      <span class="rspan3">{{listData[5].game}}</span>
+      <span class="rspan2">3</span>
+      <span class="rspan3">0</span>
+      <!-- <span class="rspan2">{{listData[5].game}}</span>
+      <span class="rspan3">{{listData[5].game}}</span> -->
     </div>
+    <img src="/data/images/tou.png" alt="" class="touimg">
   </div>
 </template>
 
 <script>
+
+
+
 export default {
   name: 'HelloWorld',
   props: {
@@ -87,6 +97,7 @@ export default {
     }
   },
    mounted(){
+     
     axios({
       url:'/data/json/shuju.json',
       // params:{_page:1,_limit:8}
@@ -94,6 +105,7 @@ export default {
       res=>{return this.listData = res.data}
       
     )
+
   }
 }
 
@@ -101,6 +113,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.touimg{
+  position:absolute;
+  left:746px;
+  top:137px;
+}
 .imgs5{
   width:200px;
   height: 40px;
