@@ -1,0 +1,27 @@
+/* 侧边栏*/
+.sideHead{margin-top: 24px;text-align: center;}
+.sideHead .avatarWrap{position: relative;margin: auto; width: 64px;height: 64px;}
+.sideHead .avatar{display: block; width: 64px;height: 64px;background-color: white;border-radius: 32px;}
+.sideHead .file{position: absolute;left:0;top:0;width: 100%;height:100%;opacity: 0;}
+.sideHead .idNo{padding: 2px 8px;background-color: white;font-size: 16px;border-radius: 4px;}
+.sideNav{margin-top: 12px;overflow: hidden;}
+.sideNav .item{margin-top: 10px;height: 36px;display: flex;align-items: center;background-color: white;border: 1px solid #E4E4E4;font-size: 16px;border-radius: 4px;box-sizing: border-box;cursor: pointer;color:#666;}
+.sideNav .icon{margin: 0 10px;width: 25px;height: 25px;}
+.sideNav .item.cur{background-color: #6666FF;color: white;border-color: #6666FF}
+
+
+.mainNav{position: relative;margin-top:48px;height:30px;display: flex;}
+.mainNav .item{font-size:15px;position: relative;margin-right:8px; line-height:30px;min-width:107px;text-align: center;border-radius: 6px 6px 0 0;cursor: pointer;text-indent: -16px;color:#666666;}
+.mainNav .item.cur{background-color: white;color:#6666FF;}
+.mainNav .icon-close{position: absolute;top:0;bottom:0;right:1px;margin: auto; }
+.mainNav .item:first-child{text-indent: 0;}
+/*.mainNav .item:first-child .icon-close{display: none;}*/
+
+
+/* 公告*/
+.notice-list .item{margin-bottom: 16px;display: flex;justify-content: space-between;align-items: center;}
+.notice-list .title{cursor: pointer;color:#666666;}
+.article{font-size:14px;}
+.article .h3{padding:12px 0; text-align: center;color:#333; font-size:20px;}
+.article .time{margin-bottom:12px;padding-bottom:12px; text-align: right;border-bottom:1px solid #E4E4E4;}
+.article .p{margin-bottom:8px;line-height:24px; text-indent: 2em;}

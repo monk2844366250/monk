@@ -1,0 +1,2024 @@
+<template>
+  <div class="form">
+    <div class="step-title">第一步：填写商品信息</div>
+    <div v-for="item in addShop">
+      <el-divider v-if="item!==1">附加商品{{ item-1 }}</el-divider>
+      <el-row v-if="item!==1">
+        <i style="color: #20a0ff;float: right" class="el-icon-delete" @click="delStore(item)" />
+      </el-row>
+      <div class="form-item">
+        <span class="form-required">*必填</span>
+        <span class="form-label">商品标题：</span>
+        <el-input
+          v-model="form.taskGoodsList[item-1].name"
+          class="w400"
+          size="small"
+          placeholder="请输入正确的商品全标题"
+        />
+        <div class="form-err form-err-change">（仅用于平台审核，用户不可见）</div>
+      </div>
+      <div class="form-item">
+        <span class="form-required">*必填</span>
+        <span class="form-label">商品链接：</span>
+        <el-input
+          v-model="form.taskGoodsList[item-1].url"
+          class="w400"
+          size="small"
+          placeholder="请输入正确的商品网页端网址"
+          @blur="inputBlur"
+        />
+        <div class="form-err form-err-change">（仅用于平台审核，用户不可见）</div>
+      </div>
+      <div class="form-item" style="position: relative">
+        <span class="form-required">*必填</span>
+        <span class="form-label">商品主图：</span>
+        <div style="position: relative">
+          <el-upload
+            style="margin-right: 20px;background-color: #F2F2F2;"
+            class="avatar-uploader"
+            :before-upload="function(file) {
+              return uploadImageShopChange(item-1)
+            }"
+            :http-request="uploadImage1"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+          >
+            <img v-if="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+          <i class="el-icon-circle-close avatar-uploader-remove" @click="removeMainImg(item)" />
+        </div>
+        <el-popover
+          placement="top"
+          width="200"
+          trigger="hover"
+        >
+          <img
+            style="width: 175px; height: 200px"
+            :src="require('@/assets/images/shilizhutu.png')"
+            fit="fill"
+          >
+          <el-button slot="reference" type="text" class="epshow">查看示例图</el-button>
+        </el-popover>
+
+        <div style="position: relative;width: 480px;">
+          <div class="upload-d">上传“商品主图”，确保与搜索页面展示的图片一致。</div>
+          <div class="form-err upload-e">(如上传不成功请使用谷歌浏览器)</div>
+        </div>
+      </div>
+      <div class="form-item" style="margin-top: 35px">
+        <span class="form-required">*必填</span>
+        <span class="form-label">搜索展示价：</span>
+        <el-input v-model="form.taskGoodsList[item-1].showPrice" size="mini" type="number" style="width: 140px">
+          <template slot="append">元</template>
+        </el-input>
+        <span class="form-label form-label-price">实际成交价：</span>
+        <el-input v-model="form.taskGoodsList[item-1].realPrice" size="mini" type="number" :min="0" style="width: 140px">
+          <template slot="append">元</template>
+        </el-input>
+        <span class="form-label form-label-price">付款人数：</span>
+        <el-input v-model="form.taskGoodsList[item-1].payPeopleNum" size="mini" type="number" :min="0" style="width: 140px">
+          <template slot="append">人</template>
+        </el-input>
+
+      </div>
+      <div class="form-item">
+        <span class="form-required">*必填</span>
+        <span class="form-label">每单拍：</span>
+        <el-input-number v-model="form.taskGoodsList[item-1].num" size="mini" :min="1" style="width: 130px" />
+        <span class="form-label" style="margin-left: 10px">件</span>
+      </div>
+      <div class="form-item" style="margin-top: 35px">
+        <span class="form-required" />
+        <span class="form-label">商品是否开通淘客推广：</span>
+        <el-radio-group v-model="form.taskGoodsList[item-1].tbkFlag">
+          <el-radio :label="1" style="color:#97A8BE ">是</el-radio>
+          <el-radio :label="2" style="color:#97A8BE ">否</el-radio>
+
+        </el-radio-group>
+      </div>
+
+    </div>
+    <div class="form-item" style="margin-top: 0">
+      <span class="form-required" />
+      <el-button type="text" @click="handleAddGood">+新增附加商品</el-button>
+      <span style="font-size: 12px;color:#bcbcbc;padding: 12px 0 ">（最多可添加2个附加商品）</span>
+    </div>
+    <div class="step-title">第二步：填写搜索信息</div>
+    <div class="form-item">
+      <span class="form-required">*必填</span>
+      <span class="form-label">选择排序方式：</span>
+      <div class="form-block radio-list">
+        <el-radio-group
+          v-model="form.searchSortWay "
+          class="item"
+          style="margin-left: 14px;padding-top: 10px;"
+          fill="red"
+          text-color="#6666FF"
+        >
+          <el-radio v-for="item in sortList" :label="item.name">{{ item.name }}</el-radio>
+        </el-radio-group>
+      </div>
+    </div>
+
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label">商品所在地：</span>
+      <div class="pr">
+        <v-distpicker hide-area :province="province" :city="city" @province="onChangeProvince" @city="onChangeCity" />
+      </div>
+      <span class="form-required" />
+      <span class="form-label">筛选价格区间：</span>
+      <el-input v-model="form.searchMinPrice" size="mini" :min="0" :max="form.searchMaxPrice" type="number" style="width: 130px">
+        <template slot="append">元</template>
+      </el-input>
+      <span style="color:#6666FF;width: 20px;font-size: 12px;text-align: center;">一</span>
+      <el-input v-model="form.searchMaxPrice" size="mini" :min="form.searchMinPrice" type="number" style="width: 130px">
+        <template slot="append">元</template>
+      </el-input>
+    </div>
+    <div class="form-item">
+      <!-- <span class="form-required">*必填</span> -->
+      <span class="form-label">订单留言：</span>
+      <el-input v-model="form.orderMessageBoard" size="small" placeholder="最多50字！" style="width: 400px" />
+      <div class="form-err" style="font-size: 12px"> （用户下单给商家的留言，谨慎使用！）</div>
+    </div>
+
+    <div class="step-title">第三步：设置评价类型</div>
+    <div class="form-item">
+      <span class="form-required">*必填</span>
+      <span class="form-label">选择评价类型：</span>
+      <div class="form-block radio-list">
+        <el-radio-group
+          v-model="form.commentType"
+          class="item"
+          style="padding-top: 10px;"
+          fill="red"
+          text-color="#6666FF"
+          @change="handleCommentType"
+        >
+          <el-radio :label="1" style="margin-right: 10px">
+            普通好评任务
+          </el-radio>
+          <el-radio :label="2" style="margin-right: 10px">
+            指定文字好评
+            <span style="color: red;font-size: 12px;">+{{ cost.wordAmount }}金/单</span></el-radio>
+          <el-radio :label="3" style="margin-right: 10px">
+            指定图片好评
+            <span style="color: red;font-size: 12px;">+{{ cost.imageAmount }}金/单</span>
+          </el-radio>
+          <el-radio :label="4" style="margin-right: 10px">
+            指定视频好评
+            <span style="color: red;font-size: 12px;">+{{ cost.videoAmount }}金/单</span>
+          </el-radio>
+        </el-radio-group>
+      </div>
+    </div>
+    <div class="form-item">
+      <span class="form-required">*必填</span>
+      <span class="form-label">选择活动类型：</span>
+      <div class="form-block radio-list">
+        <el-radio-group
+          v-model="form.guideEntrance"
+          class="item"
+          style="padding-top: 10px;"
+          fill="red"
+          text-color="#6666FF"
+        >
+          <el-radio v-for="item in hdList" :label="item.name">{{ item.name }}</el-radio>
+        </el-radio-group>
+      </div>
+    </div>
+
+    <div class="form-item">
+      <span class="form-required">*必填</span>
+      <span class="form-label">设置引导图：</span>
+      <div class="form-err form-err-change"> （最多可添加3张图片，单张图片大小在3M以内选择文件）</div>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <div style="position: relative">
+        <el-upload
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          style="margin-right: 20px;background-color: #F2F2F2"
+          :http-request="uploadImageydt1"
+          :show-file-list="false"
+        >
+          <img v-if="form.guideImgUrl1" :src="form.guideImgUrl1" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+        <i class="el-icon-circle-close avatar-uploader-remove" @click="form.guideImgUrl1=null" />
+      </div>
+      <div style="position: relative">
+        <el-upload
+          style="margin-right: 20px;background-color: #F2F2F2"
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :http-request="uploadImageydt2"
+          :show-file-list="false"
+        >
+          <img v-if="form.guideImgUrl2" :src="form.guideImgUrl2" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+        <i class="el-icon-circle-close avatar-uploader-remove" @click="form.guideImgUrl2=null" />
+      </div>
+      <div style="position: relative">
+        <el-upload
+          style="margin-right: 20px;background-color: #F2F2F2"
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :http-request="uploadImageydt3"
+          :show-file-list="false"
+        >
+          <img v-if="form.guideImgUrl3" :src="form.guideImgUrl3" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+        <i class="el-icon-circle-close avatar-uploader-remove" @click="form.guideImgUrl3=null" />
+      </div>
+    </div>
+    <div class="form-item">
+      <span class="form-required">*必填</span>
+      <span class="form-label">设置单数：</span>
+      <el-input-number v-model="form.orderNum" size="mini" :min="1" style="width: 130px" @change="watchChange" />
+      <span class="form-label" style="margin-left: 10px">单</span>
+    </div>
+    <div v-for="item in addpj" v-if="form.commentType===2" class="form-item">
+      <span class="form-required">{{ item===1?'*必填':'' }}</span>
+      <span class="form-label">文字好评{{ item }}：</span>
+      <el-input v-model="wzList[item-1].content" size="small" style="width: 350px" />
+    </div>
+    <div v-for="item in addpj" v-if="form.commentType===3">
+      <div class="form-item">
+        <span class="form-required">{{ item===1?'*必填':'' }}</span>
+        <span class="form-label">第{{ item }}单：</span>
+      </div>
+      <div class="form-item">
+        <span class="form-required" />
+        <span class="form-label">设置照片中的商品规格：</span>
+        <el-input v-model="tpList[item-1].norm" size="small" style="width: 350px" placeholder=" 如颜色、尺寸等" />
+        <div class="form-err" style="font-size: 12px"> (规格设置务必要与图片中的商品规格保持一致)</div>
+      </div>
+      <div class="form-item">
+        <span class="form-required" />
+        <span class="form-label">评价图片：</span>
+        <span style="font-size: 12px;color:#bcbcbc;">（最多可添加5张图片）</span>
+      </div>
+      <div class="form-item">
+        <span class="form-required" />
+        <div style="position: relative">
+          <el-upload
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            style="margin-right: 20px;background-color: #F2F2F2;"
+            :before-upload="function(file) {
+              return uploadImagePjtpChange(item-1,1)
+            }"
+            :http-request="uploadImagePjtp"
+            :show-file-list="false"
+          >
+            <img v-if="tpList[item-1].imgUrl1" :src="tpList[item-1].imgUrl1" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+
+          </el-upload>
+          <i class="el-icon-circle-close avatar-uploader-remove" @click="tpList[item-1].imgUrl1=null" />
+
+        </div>
+        <div style="position: relative">
+          <el-upload
+            style="margin-right: 20px;background-color: #F2F2F2"
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :before-upload="function(file) {
+              return uploadImagePjtpChange(item-1,2)
+            }"
+            :http-request="uploadImagePjtp"
+            :show-file-list="false"
+          >
+            <img v-if="tpList[item-1].imgUrl2" :src="tpList[item-1].imgUrl2" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+          <i class="el-icon-circle-close avatar-uploader-remove" @click="tpList[item-1].imgUrl2=null" />
+
+        </div>
+        <div style="position: relative">
+          <el-upload
+            style="margin-right: 20px;background-color: #F2F2F2"
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :before-upload="function(file) {
+              return uploadImagePjtpChange(item-1,3)
+            }"
+            :http-request="uploadImagePjtp"
+            :show-file-list="false"
+          >
+            <img v-if="tpList[item-1].imgUrl3" :src="tpList[item-1].imgUrl3" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+          <i class="el-icon-circle-close avatar-uploader-remove" @click="tpList[item-1].imgUrl3=null" />
+
+        </div>
+        <div style="position: relative">
+          <el-upload
+            style="margin-right: 20px;background-color: #F2F2F2"
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :before-upload="function(file) {
+              return uploadImagePjtpChange(item-1,4)
+            }"
+            :http-request="uploadImagePjtp"
+            :show-file-list="false"
+          >
+            <img v-if="tpList[item-1].imgUrl4" :src="tpList[item-1].imgUrl4" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+          <i class="el-icon-circle-close avatar-uploader-remove" @click="tpList[item-1].imgUrl4=null" />
+
+        </div>
+        <div style="position: relative">
+          <el-upload
+            style="background-color: #F2F2F2"
+            class="avatar-uploader"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :before-upload="function(file) {
+              return uploadImagePjtpChange(item-1,5)
+            }"
+            :http-request="uploadImagePjtp"
+            :show-file-list="false"
+          >
+            <img v-if="tpList[item-1].imgUrl5" :src="tpList[item-1].imgUrl5" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
+          </el-upload>
+          <i
+            class="el-icon-circle-close avatar-uploader-remove"
+            style="right: -13px"
+            @click="tpList[item-1].imgUrl5=null"
+          />
+
+        </div>
+
+      </div>
+      <div class="form-item">
+        <span class="form-required" />
+        <span class="form-label">评语：</span>
+        <el-input v-model="tpList[item-1].content" size="small" style="width: 350px" placeholder="" />
+
+      </div>
+      <el-divider />
+    </div>
+    <div v-for="item in addpj" v-if="form.commentType===4">
+      <div class="form-item">
+        <span class="form-required">{{ item===1?'*必填':'' }}</span>
+        <span class="form-label">第{{ item }}单：</span>
+      </div>
+      <div class="form-item">
+        <span class="form-required" />
+        <span class="form-label">设置视频中的商品规格：</span>
+        <el-input v-model="spList[item-1].norm" size="small" style="width: 350px" placeholder=" 如颜色、尺寸等" />
+        <div class="form-err" style="font-size: 12px"> (规格设置务必要与视频中的商品规格保持一致)</div>
+      </div>
+      <div class="form-item" style="position:relative;">
+        <span class="form-required" />
+        <span class="form-label">选择视频：</span>
+        <el-upload
+          class="avatar-uploader el-upload--text"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :show-file-list="false"
+          accept=".mp4, .avi, .wmv"
+          :on-success="handleVideoSuccess"
+          :before-upload="beforeUploadVideo"
+          :on-progress="uploadVideoProcess"
+          :http-request="uploadImagePjsp"
+        >
+          <video
+            v-if="spList[item-1].videoUrl"
+            :src="spList[item-1].videoUrl"
+            class="avatar video-avatar"
+            controls="controls"
+            height="100px"
+          >
+            您的浏览器不支持视频播放
+          </video>
+          <el-progress
+            v-if="videoFlag == true"
+            type="circle"
+            :percentage="videoUploadPercent"
+            style="margin-top:1000px;"
+          />
+          <i class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+        <i class="el-icon-circle-close avatar-uploader-remove avatar-uploader-remove-class" @click="spList[item-1].videoUrl=null" />
+      </div>
+      <div class="form-item">
+        <span class="form-required" />
+        <span class="form-label">评语：</span>
+        <el-input v-model="spList[item-1].content" size="small" style="width: 350px" placeholder="" />
+
+      </div>
+      <el-divider />
+    </div>
+
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label">商品详情文字：</span>
+      <el-input v-model="form.taskGoodsList[0].content" size="small" :maxlength="5" style="width: 350px" placeholder="最多5个字！" />
+      <el-popover
+        placement="top"
+        width="200"
+        trigger="hover"
+      >
+        <img
+          style="width: 525px; height: 600px"
+          :src="require('@/assets/images/spxq.png')"
+          fit="fill"
+        >
+        <el-button slot="reference" type="text" style="position: absolute">查看示例图</el-button>
+      </el-popover>
+    </div>
+
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label">
+        <el-checkbox v-model="isReleaseDate" @change="handleChangeReleaseDate">任务发布时间</el-checkbox>
+      </span>
+      <el-date-picker
+        v-model="form.releaseDate"
+        :picker-options="pickerOptions"
+        size="small"
+        type="date"
+        value-format="yyyy-MM-dd"
+        :placeholder="nowDateTime"
+        @change="handleReleaseDate"
+      />
+      <span style="color: #6666FF;width: 50px;text-align: center;font-size: 14px">放出</span>
+      <el-input-number v-model="orderAll" size="mini" :min="1" style="width: 140px" />
+      <span class="form-label" style="margin-left: 10px">单</span>
+      <span style="color: #97A8BE;width: 100px;text-align: center">总共添加</span>
+      <span>{{ inputAll }}</span>
+      <!-- <span style="width:60px;" />
+      <div>
+        <span style="color: #97A8BE;width: 70px;text-align: center;font-size: 14px;display:inline-block;">放出</span>
+        <span style="width: 100px" v-text="orderAll" />
+        <span class="form-label" style="margin-left: 20px">单</span>
+      </div> -->
+    </div>
+
+    <div v-show="isReleaseDate" class="clock" style="margin-left: 44px;">
+      <span style="color:#6666FF;font-weight: bold;font-size: 15px ">24小时细分：</span>
+      <ul class="clock-list">
+        <li class="item"><span class="sp1">0点</span> <input
+          v-model="hour24Data[0]"
+          :disabled="!(0 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">1点</span> <input
+          v-model="hour24Data[1]"
+          :disabled="!(1 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">2点</span> <input
+          v-model="hour24Data[2]"
+          :disabled="!(2 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">3点</span> <input
+          v-model="hour24Data[3]"
+          :disabled="!(3 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">4点</span> <input
+          v-model="hour24Data[4]"
+          :disabled="!(4 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">5点</span> <input
+          v-model="hour24Data[5]"
+          :disabled="!(5 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">6点</span> <input
+          v-model="hour24Data[6]"
+          :disabled="!(6 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">7点</span> <input
+          v-model="hour24Data[7]"
+          :disabled="!(7 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">8点</span> <input
+          v-model="hour24Data[8]"
+          :disabled="!(8 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">9点</span> <input
+          v-model="hour24Data[9]"
+          :disabled="!(9 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">10点</span> <input
+          v-model="hour24Data[10]"
+          :disabled="!(10 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">11点</span> <input
+          v-model="hour24Data[11]"
+          :disabled="!(11 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">12点</span> <input
+          v-model="hour24Data[12]"
+          :disabled="!(12 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">13点</span> <input
+          v-model="hour24Data[13]"
+          :disabled="!(13 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">14点</span> <input
+          v-model="hour24Data[14]"
+          :disabled="!(14 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">15点</span> <input
+          v-model="hour24Data[15]"
+          :disabled="!(15 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">16点</span> <input
+          v-model="hour24Data[16]"
+          :disabled="!(16 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">17点</span> <input
+          v-model="hour24Data[17]"
+          :disabled="!(17 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">18点</span> <input
+          v-model="hour24Data[18]"
+          :disabled="!(18 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">19点</span> <input
+          v-model="hour24Data[19]"
+          :disabled="!(19 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">20点</span> <input
+          v-model="hour24Data[20]"
+          :disabled="!(20 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">21点</span> <input
+          v-model="hour24Data[21]"
+          :disabled="!(21 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">22点</span> <input
+          v-model="hour24Data[22]"
+          :disabled="!(22 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+        <li class="item"><span class="sp1">23点</span> <input
+          v-model="hour24Data[23]"
+          :disabled="!(23 >= hour24Show)"
+          class="sp2"
+          type="number"
+          @input="changeValue(val)"
+        ></li>
+
+      </ul>
+    </div>
+
+    <div class="step-title">第四步：筛选用户截图</div>
+
+    <div v-for="imgItem in imgList" class="form-item">
+      <span class="form-required" />
+      <span class="form-label">{{ imgItem.name }}：</span>
+      <el-checkbox-group v-if="imgItem.name === '搜索货比'" v-model="screenshotDetails" style="display: flex;" @change="handleCheckBox">
+        <div
+          v-for="(childImgItem, index) in imgItem.taskScreenshotCategoryDetailList"
+          :key="index"
+          class="checkbox-mr"
+          style="width: 135px"
+        >
+          <el-checkbox :label="childImgItem.id">
+            <!--<el-button size="mini" class="checkbox-button-width">{{ childImgItem.name}}</el-button>-->
+            <div
+              class="checkbox-button-width"
+              style="border: 1px solid #DCDFE6;padding: 5px 7px;width: 105px;height:28px;text-align: center"
+            >
+              {{ childImgItem.name }}
+            </div>
+          </el-checkbox>
+
+          <span v-if="childImgItem.amount>0" class="checkbox-tip">+{{ childImgItem.amount }}金/单</span>
+        </div>
+      </el-checkbox-group>
+      <el-checkbox-group v-else v-model="form.screenshotDetailIds" style="display: flex;">
+        <div
+          v-for="childImgItem in imgItem.taskScreenshotCategoryDetailList"
+          class="checkbox-mr"
+          style="width: 135px"
+        >
+          <el-checkbox :label="childImgItem.id">
+            <!--<el-button size="mini" class="checkbox-button-width">{{ childImgItem.name}}</el-button>-->
+            <div
+              class="checkbox-button-width"
+              style="border: 1px solid #DCDFE6;padding: 5px 7px;width: 105px;height:28px;text-align: center"
+            >
+              {{ childImgItem.name }}
+            </div>
+          </el-checkbox>
+
+          <span v-if="childImgItem.amount>0" class="checkbox-tip">+{{ childImgItem.amount }}金币/单</span>
+        </div>
+      </el-checkbox-group>
+
+    </div>
+
+    <div class="step-title">第五步：选择增值服务</div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label">常规服务</span>
+      <el-checkbox v-model="form.taskAdditionalIncrement.toUp" :true-label="1" :false-label="2">任务置顶
+      </el-checkbox>
+      <span style="font-size: 12px;color:#bcbcbc;">（优先派单）</span>
+      <span style="font-size: 12px;color:red; ">+{{ cost.taskToUpAmount }}元/任务</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <span style="color: #97A8BE;margin-right: 10px">每单加赏</span>
+      <el-input-number v-model="form.taskAdditionalIncrement.rewardAmount" :min="0" size="mini" style="width: 100px" />
+      <span class="form-label" style="margin-left: 10px">金</span>
+      <span style="font-size: 12px;color:#bcbcbc;margin-left: 10px"> (加赏佣金能调动用户的接单积极性)</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label">千人千面</span>
+      <span style="color: #97A8BE;margin-right: 10px">性别：</span>
+      <el-radio-group
+        v-model="form.taskAdditionalIncrement.sex"
+        class="item"
+        style="margin-left: 14px;"
+        fill="red"
+        text-color="#6666FF"
+      >
+        <el-radio :label="1" style="color: #97A8BE" @click.native.prevent="clickItem(1)">男</el-radio>
+        <el-radio :label="2" style="color: #97A8BE" @click.native.prevent="clickItem(2)">女</el-radio>
+        <el-radio style="color: #97A8BE">不选</el-radio>
+      </el-radio-group>
+      <span style="font-size: 12px;color:#bcbcbc;">（仅限选择性别的用户可接该任务）</span>
+      <span style="font-size: 12px;color:red; ">+{{ cost.sexAmount }}金/单</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <span style="color: #97A8BE;margin-right: 10px">年龄：</span>
+      <el-radio-group v-model="age" class="item" style="margin-left: 14px;">
+        <el-radio label="18-25" style="color: #97A8BE" @click.native.prevent="clickItemAge('18-25')">18-25</el-radio>
+        <el-radio label="26-35" style="color: #97A8BE" @click.native.prevent="clickItemAge('26-35')">26-35</el-radio>
+        <el-radio label="35-99" style="color: #97A8BE" @click.native.prevent="clickItemAge('35-99')">35岁以上</el-radio>
+        <el-radio label="0-100" style="color: #97A8BE">不选</el-radio>
+      </el-radio-group>
+      <span style="font-size: 12px;color:#bcbcbc;">（仅限选择性别的用户可接该任务）</span>
+      <span style="font-size: 12px;color:red; ">+{{ cost.ageAmount }}金/单</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <span style="color: #97A8BE;margin-right: 10px">地区：</span>
+      <span style="font-size: 12px;color:#bcbcbc;"> (勾选区域代表不能接单的区域，例如不需要新疆买家，就勾选新疆)</span>
+      <span style="font-size: 12px;color:red; ">+{{ cost.areaAmount }}金/单</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <div class="checkbox-list">
+        <el-checkbox-group v-model="form.taskAdditionalIncrement.area">
+          <div>
+            <el-checkbox label="上海">上海</el-checkbox>
+            <el-checkbox label="江苏">江苏</el-checkbox>
+            <el-checkbox label="浙江">浙江</el-checkbox>
+            <el-checkbox label="安徽">安徽</el-checkbox>
+            <el-checkbox label="江西">江西</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox label="北京">北京</el-checkbox>
+            <el-checkbox label="天津">天津</el-checkbox>
+            <el-checkbox label="山西">山西</el-checkbox>
+            <el-checkbox label="山东">山东</el-checkbox>
+            <el-checkbox label="河北">河北</el-checkbox>
+            <el-checkbox label="内蒙古">内蒙古</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox label="湖南">湖南</el-checkbox>
+            <el-checkbox label="湖北">湖北</el-checkbox>
+            <el-checkbox label="河南">河南</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox label="广东">广东</el-checkbox>
+            <el-checkbox label="广西">广西</el-checkbox>
+            <el-checkbox label="福建">福建</el-checkbox>
+            <el-checkbox label="海南">海南</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox label="辽宁">辽宁</el-checkbox>
+            <el-checkbox label="吉林">吉林</el-checkbox>
+            <el-checkbox label="黑龙江">黑龙江</el-checkbox>
+          </div>
+          <div>
+            <el-checkbox label="陕西">陕西</el-checkbox>
+            <el-checkbox label="新疆">新疆</el-checkbox>
+            <el-checkbox label="甘肃">甘肃</el-checkbox>
+            <el-checkbox label="宁夏">宁夏</el-checkbox>
+            <el-checkbox label="青海">青海</el-checkbox>
+
+          </div>
+          <div>
+            <el-checkbox label="重庆">重庆</el-checkbox>
+            <el-checkbox label="云南">云南</el-checkbox>
+            <el-checkbox label="贵州">贵州</el-checkbox>
+            <el-checkbox label="西藏">西藏</el-checkbox>
+            <el-checkbox label="四川">四川</el-checkbox>
+
+          </div>
+        </el-checkbox-group>
+      </div>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <span style="color: #97A8BE;margin-right: 10px">类目：</span>
+      <span style="font-size: 12px;color:#bcbcbc;">  (勾选类目代表可以接单的类目)</span>
+      <span style="font-size: 12px;color:red; ">+{{ cost.huabeiAmount }}金/单</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <el-checkbox-group v-model="form.taskAdditionalIncrement.goodsCategory">
+        <div style="width: 550px;">
+          <el-checkbox v-for="item in goodsCategoryList" :label="item.id">{{ item.name }}</el-checkbox>
+        </div>
+      </el-checkbox-group>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <span style="margin-right: 10px">
+        <el-checkbox
+          v-model="form.taskAdditionalIncrement.baiTiao"
+          :true-label="1"
+          :false-label="2"
+          style="color: #97A8BE"
+        >仅白条号可接任务接单</el-checkbox>
+      </span>
+      <span style="font-size: 12px;color:red; ">+{{ cost.baitiaoAmount }}金/单</span>
+    </div>
+
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <span style="margin-right: 10px">
+        <el-checkbox
+          v-model="form.taskAdditionalIncrement.alreadyBrowseTask"
+          :true-label="1"
+          :false-label="2"
+          style="color: #97A8BE"
+        >仅限做过该商品浏览任务的用户接单</el-checkbox>
+      </span>
+      <span style="font-size: 12px;color:red; ">+{{ cost.alreadyBrowseTaskAmount }}金/单</span>
+    </div>
+
+    <div v-if="expressFlag" class="form-item">
+      <span class="form-required" />
+      <span class="form-label">空包服务</span>
+      <span style="color: #97A8BE;margin-right: 10px">快递：</span>
+      <el-select v-model="form.taskAdditionalIncrement.courierCompanyId" size="mini">
+        <el-option
+          v-for="item in kdList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        />
+      </el-select>
+      <span style="width: 30px;text-align: center;color: #97A8BE">重</span>
+      <el-input v-model="form.taskAdditionalIncrement.weight" size="mini" style="width: 150px">
+        <template slot="append">KG</template>
+      </el-input>
+      <el-button style="margin-left: 20px" size="mini" type="danger" @click="delIncrement()">清 空</el-button>
+    </div>
+
+    <div class="step-title">第六步：填写附加要求</div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label">添加图片说明</span>
+      <span style="font-size: 12px;color:#bcbcbc;">如有需要备注可添加图片，最多可添加3张，图片中不要显示店铺名或商品名，避免用户直接搜索！</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <div style="position: relative">
+        <el-upload
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          style="margin-right: 20px;background-color: #F2F2F2"
+          :http-request="uploadImageBz1"
+          :show-file-list="false"
+        >
+          <img v-if="form.remarkImgUrl1" :src="form.remarkImgUrl1" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+        <i class="el-icon-circle-close avatar-uploader-remove" @click="removeAddImg1()" />
+      </div>
+      <div style="position: relative">
+        <el-upload
+          style="margin-right: 20px;background-color: #F2F2F2"
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :http-request="uploadImageBz2"
+          :show-file-list="false"
+        >
+          <img v-if="form.remarkImgUrl2" :src="form.remarkImgUrl2" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+        <i class="el-icon-circle-close avatar-uploader-remove" @click="removeAddImg2()" />
+      </div>
+      <div style="position: relative">
+        <el-upload
+          style="margin-right: 20px;background-color: #F2F2F2"
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :http-request="uploadImageBz3"
+          :show-file-list="false"
+        >
+          <img v-if="form.remarkImgUrl3" :src="form.remarkImgUrl3" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+        <i class="el-icon-circle-close avatar-uploader-remove" @click="removeAddImg3()" />
+      </div>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <span style="color: #97A8BE;margin-right: 10px">备注</span>
+    </div>
+    <div class="form-item">
+      <span class="form-required" />
+      <span class="form-label" />
+      <div class="remark">
+        <el-input
+          v-model="form.orderRemarks"
+          type="textarea"
+          maxlength="100"
+          :autosize="{ minRows: 5, maxRows: 5}"
+          placeholder="重要！如果对任务有特殊要求，请在这里备注清楚，用户接单后会看到，最多100字（任务备注只限商家要求，平台负责传达信息不会强制要求用户按照要求执行）"
+        />
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 65px">
+      <el-button class="activity-button" style="margin-right: 80px;width: 100px" size="mini" @click="handlePre()">
+        上一步
+      </el-button>
+      <el-button class="activity-button" style="width: 100px" size="mini" @click="handleNext()">
+        下一步
+      </el-button>
+      <!--<el-button class="btn-theme" v-if="active >= 2" size="mini" @click="handleSuccess">付款并发布任务</el-button>-->
+    </div>
+
+  </div>
+</template>
+
+<script>
+
+import {
+  create,
+  selectYwTaskSortWayList,
+  selectYwTaskScreenshotCategoryList,
+  selectYwGoodsCategoryList,
+  selectYwCourierCompanyList,
+  selectYwTaskActivityTypeList,
+  selectYwTaskFeeConfig
+} from '@/api/shop'
+import VDistpicker from 'v-distpicker'
+import { uploadImage } from '@/utils'
+
+export default {
+  name: 'Jdtb',
+  components: { VDistpicker },
+  props: {
+    storeType: {
+      required: true
+    },
+    taskType: {
+      required: true
+    },
+    store: {
+      required: true
+    },
+    expressFlag: {
+      required: true
+    }
+  },
+  data() {
+    return {
+      pickerOptions: {
+        disabledDate(time) {
+          const _now = Date.now()
+          return time.getTime() < _now - 8.64e7
+        }
+      },
+      taskCommentVal: '',
+      nowDateTime: '',
+      uploadUrl: '', // 你要上传视频到你后台的地址
+      videoFlag: false, // 是否显示进度条
+      videoUploadPercent: 0, // 进度条的进度，
+      isShowUploadVideo: false, // 显示上传按钮
+      remarkVideo: null,
+      province: '',
+      city: '',
+      imageUrl: '',
+      addShop: 1,
+      addKeyWord: 1,
+      addewm: 1,
+      addtkl: 1,
+      checkList: [],
+      order1: [],
+      order2: [],
+      order3: [],
+      orderAll: 1,
+      inputAll: 1, // 总单数
+      screenshotDetails: [], // 存放搜索货比的值
+      form: {
+        taskGoodsList: [{
+          name: null,
+          content: null,
+          url: null,
+          img: null,
+          showPrice: null,
+          realPrice: null,
+          payPeopleNum: null,
+          num: null,
+          mainFlag: 1,
+          tbkFlag: 2
+        }],
+        taskReleaseTimeList: [],
+        storeTypeId: null,
+        storeId: null,
+        taskTypeId: null,
+        searchSortWay: null,
+        searchType: 1,
+        searchLocation: null,
+        searchMaxPrice: null,
+        searchMinPrice: null,
+        orderNum: null,
+        guideEntrance: '淘抢购',
+        guideImgUrl1: null,
+        guideImgUrl2: null,
+        guideImgUrl3: null,
+        releaseDate: null,
+        orderMessageBoard: null,
+        commentType: 1,
+        screenshotDetailIds: [],
+        taskAdditionalIncrement: {
+          toUp: 2,
+          rewardAmount: null,
+          weight: null,
+          sex: null,
+          minAge: null,
+          maxAge: null,
+          courierCompanyId: null,
+          area: [],
+          baiTiao: 2,
+          alreadyBrowseTask: 2,
+          goodsCategory: []
+        },
+        taskCommentList: [{ type: 1 }],
+        orderRemarks: '',
+        remarkImgUrl1: null,
+        remarkImgUrl2: null,
+        remarkImgUrl3: null
+      },
+      sortList: [],
+      imgList: [],
+      age: '',
+      area: '',
+      isReleaseDate: false,
+      hour24Show: 0,
+      ewmIndex: 0,
+      shopIndex: 0,
+      hour24Data: [],
+      goodsCategoryList: [],
+      kdList: [],
+      hdList: [],
+      wzList: [{ type: 2, content: '' }],
+      tpList: [{
+        type: 3,
+        content: '',
+        norm: '',
+        imgUrl1: '',
+        imgUrl2: '',
+        imgUrl3: '',
+        imgUrl4: '',
+        imgUrl5: ''
+      }],
+      spList: [{ type: 4, content: '', norm: '', videoUrl: '' }],
+      pjtpIndex: 0,
+      pjtpNum: 0,
+      pjspIndex: 0,
+      cost: {}
+    }
+  },
+  computed: {
+    addpj: function() {
+      var count = 1
+      count = this.form.orderNum
+      if (this.form.commentType === 2) {
+        var length = this.wzList.length
+        if (length > count) {
+          this.wzList.splice(count, length - count)
+        } else {
+          for (var i = length; i < count; i++) {
+            this.wzList.push({ type: 2, content: '' })
+          }
+        }
+      } else if (this.form.commentType === 3) {
+        var length = this.tpList.length
+        if (length > count) {
+          this.tpList.splice(count, length - count)
+        } else {
+          for (var i = length; i < count; i++) {
+            this.tpList.push({
+              type: 3,
+              content: '',
+              norm: '',
+              imgUrl1: '',
+              imgUrl2: '',
+              imgUrl3: '',
+              imgUrl4: '',
+              imgUrl5: ''
+            })
+          }
+        }
+      } else if (this.form.commentType === 4) {
+        var length = this.spList.length
+        if (length > count) {
+          this.spList.splice(count, length - count)
+        } else {
+          for (var i = length; i < count; i++) {
+            this.spList.push({ type: 4, content: '', norm: '', videoUrl: '' })
+          }
+        }
+      }
+      return count
+    }
+  },
+  watch: {
+    order3: {
+      handler: function(val, oldval) {
+        console.log(val)
+        for (let i = 0; i < val.length; i++) {
+          if (!val[i] || val[i] === undefined) {
+            this.order3[i] = 0
+          }
+        }
+        var count = 0
+        val.map(res => {
+          count += Number(res)
+        })
+        this.orderAll = count
+        this.inputAll = count
+      },
+      deep: true
+    },
+    order2: {
+      handler: function(val, oldval) {
+        console.log(val)
+        for (let i = 0; i < val.length; i++) {
+          if (!val[i] || val[i] === undefined) {
+            this.order2[i] = 0
+          }
+        }
+        var count = 0
+        val.map(res => {
+          count += Number(res)
+        })
+        this.orderAll = count
+        this.inputAll = count
+      },
+      deep: true
+    },
+    order1: {
+      handler: function(val, oldval) {
+        console.log(val)
+        for (let i = 0; i < val.length; i++) {
+          if (!val[i] || val[i] === undefined) {
+            this.order1[i] = 0
+          }
+        }
+        var count = 0
+        val.map(res => {
+          count += Number(res)
+        })
+        this.orderAll = count
+        this.inputAll = count
+      },
+      deep: true
+    }
+  },
+  created() {
+    this.init()
+    this.form.storeId = this.store // 58
+    this.form.storeTypeId = this.storeType // 2
+    this.form.taskTypeId = this.taskType // 12
+    // qrCodeImgUrl 搜索二维码用的字段名
+  },
+  mounted() {
+    this.showDate()
+    this.form.storeId = this.store
+    this.form.storeTypeId = this.storeType
+    this.form.taskTypeId = this.taskType
+  },
+  methods: {
+    watchChange() {
+      this.orderAll = this.form.orderNum
+      this.inputAll = this.form.orderNum
+    },
+    // 改变时间内响应修改单数
+    changeValue() {
+      var detelike = parseInt(this.hour24Data[23] ? this.hour24Data[23] : 0) +
+                    parseInt(this.hour24Data[22] ? this.hour24Data[22] : 0) +
+                    parseInt(this.hour24Data[21] ? this.hour24Data[21] : 0) +
+                    parseInt(this.hour24Data[20] ? this.hour24Data[20] : 0) +
+                    parseInt(this.hour24Data[19] ? this.hour24Data[19] : 0) +
+                    parseInt(this.hour24Data[18] ? this.hour24Data[18] : 0) +
+                    parseInt(this.hour24Data[17] ? this.hour24Data[17] : 0) +
+                    parseInt(this.hour24Data[16] ? this.hour24Data[16] : 0) +
+                    parseInt(this.hour24Data[15] ? this.hour24Data[15] : 0) +
+                    parseInt(this.hour24Data[14] ? this.hour24Data[14] : 0) +
+                    parseInt(this.hour24Data[13] ? this.hour24Data[13] : 0) +
+                    parseInt(this.hour24Data[12] ? this.hour24Data[12] : 0) +
+                    parseInt(this.hour24Data[11] ? this.hour24Data[11] : 0) +
+                    parseInt(this.hour24Data[10] ? this.hour24Data[10] : 0) +
+                    parseInt(this.hour24Data[9] ? this.hour24Data[9] : 0) +
+                    parseInt(this.hour24Data[8] ? this.hour24Data[8] : 0) +
+                    parseInt(this.hour24Data[7] ? this.hour24Data[7] : 0) +
+                    parseInt(this.hour24Data[6] ? this.hour24Data[6] : 0) +
+                    parseInt(this.hour24Data[5] ? this.hour24Data[5] : 0) +
+                    parseInt(this.hour24Data[4] ? this.hour24Data[4] : 0) +
+                    parseInt(this.hour24Data[3] ? this.hour24Data[3] : 0) +
+                    parseInt(this.hour24Data[2] ? this.hour24Data[2] : 0) +
+                    parseInt(this.hour24Data[1] ? this.hour24Data[1] : 0) +
+                    parseInt(this.hour24Data[0] ? this.hour24Data[0] : 0)
+      this.orderAll = detelike
+    },
+    // 任务发布时间
+    showDate() {
+      var myDate = new Date()
+      var month = myDate.getMonth() < 9 ? '0' + (myDate.getMonth() + 1) : myDate.getMonth() + 1
+      var day = myDate.getDate() < 9 ? '0' + (myDate.getDate()) : myDate.getDate()
+      var dataToDate = myDate.getFullYear() + '-' + month + '-' + day
+      this.form.releaseDate = dataToDate
+      this.nowDateTime = dataToDate
+      if (this.nowDateTime === dataToDate) {
+        this.hour24Show = myDate.getHours() + 1
+      } else {
+        this.hour24Show = 0
+      }
+    },
+    // 上传前的函数
+    beforeUploadVideo(file) {
+      console.log('上传视频进行中')
+      // this.videoFlag = true
+    },
+    // 进度条
+    uploadVideoProcess(event, file, fileList) {
+      // this.videoFlag = true
+      this.videoUploadPercent = file.percentage.toFixed(0) * 1
+    },
+    // 上传成功回调
+    handleVideoSuccess(res, file) {
+      this.isShowUploadVideo = true
+      this.videoFlag = false
+      this.videoUploadPercent = 0
+      if (res.errorCode === '00') {
+        this.global.company.showVideoPath = res.sprbody.urlAddress
+      } else {
+        this.$message.error('视频上传失败，请重新上传！')
+      }
+    },
+    uploadImageVideo(e) {
+      this.form.remarkVideo = uploadImage(e)
+    },
+    removeAddVideo() {
+      this.form.remarkVideo = ''
+    },
+    init() {
+      selectYwTaskSortWayList({ storeTypeId: this.storeType }).then(response => {
+        this.sortList = response.data
+        this.form.searchSortWay = response.data[0].name
+      })
+      selectYwTaskScreenshotCategoryList({ taskTypeId: this.taskType }).then(response => {
+        this.imgList = response.data
+        // this.form.searchSortWay = response.data[0].name
+      })
+      selectYwGoodsCategoryList().then(response => {
+        this.goodsCategoryList = response.data
+        // this.form.searchSortWay = response.data[0].name
+      })
+      selectYwCourierCompanyList({ storeTypeId: this.storeType }).then(response => {
+        this.kdList = response.data
+        // this.form.searchSortWay = response.data[0].name
+      })
+      selectYwTaskActivityTypeList({ storeTypeId: this.storeType }).then(response => {
+        this.hdList = response.data
+        // this.form.searchSortWay = response.data[0].name
+      })
+
+      selectYwTaskFeeConfig().then(response => {
+        this.cost = response.data
+        // this.form.searchSortWay = response.data[0].name
+      })
+    },
+    // 数组分隔
+    group(array, subGroupLength) {
+      let index = 0
+      const newArray = []
+      while (index < array.length) {
+        newArray.push(array.slice(index, index += subGroupLength))
+      }
+      return newArray
+    },
+    uploadImagePjtpChange(index, val) {
+      this.pjtpIndex = index
+      this.pjtpNum = val
+    },
+    uploadImagePjtp(e) {
+      this.tpList[this.pjtpIndex]['imgUrl' + this.pjtpNum] = uploadImage(e)
+    },
+    uploadImagePjspChange(index) {
+      this.pjspIndex = index
+    },
+    uploadImagePjsp(e) {
+      this.spList[this.pjspIndex].videoUrl = uploadImage(e)
+    },
+    handlePre() {
+      this.$parent.handleNextOrPre(false)
+    },
+    uploadImageydt1(e) {
+      this.form.guideImgUrl1 = uploadImage(e)
+    },
+    uploadImageydt2(e) {
+      this.form.guideImgUrl2 = uploadImage(e)
+    },
+    uploadImageydt3(e) {
+      this.form.guideImgUrl3 = uploadImage(e)
+    },
+    uploadImage1(e) {
+      this.form.taskGoodsList[this.shopIndex].img = uploadImage(e)
+    },
+    uploadImageShopChange(index) {
+      this.shopIndex = index
+    },
+    uploadImageBz1(e) {
+      this.form.remarkImgUrl1 = uploadImage(e)
+    },
+    uploadImageBz2(e) {
+      this.form.remarkImgUrl2 = uploadImage(e)
+    },
+    uploadImageBz3(e) {
+      this.form.remarkImgUrl3 = uploadImage(e)
+    },
+    uploadImageEwm(e) {
+      this.form.taskCommentList[this.ewmIndex].qrCodeImgUrl = uploadImage(e)
+    },
+    uploadImageEwmChange(index) {
+      this.ewmIndex = index
+    },
+    onChangeProvince(a) {
+      if (a.value !== '省') {
+        this.form.searchLocation = a.value
+      }
+    },
+    onChangeCity(a) {
+      if (a.value !== '市') {
+        if (!this.form.searchLocation.includes('|')) {
+          this.form.searchLocation = this.form.searchLocation + '|' + a.value
+        } else {
+          var arrcity = this.form.searchLocation.split('|')
+          this.form.searchLocation = arrcity[0] + '|' + a.value
+        }
+      }
+    },
+    removeMainImg(val) {
+      this.form.taskGoodsList[val - 1].img = ''
+    },
+    removeAddImg1() {
+      this.form.remarkImgUrl1 = ''
+    },
+    removeAddImg2() {
+      this.form.remarkImgUrl2 = ''
+    },
+    removeAddImg3() {
+      this.form.remarkImgUrl3 = ''
+    },
+    // 删除空包
+    delIncrement() {
+      this.form.taskAdditionalIncrement.courierCompanyId = null
+      this.form.taskAdditionalIncrement.weight = null
+    },
+    // 删除附加商品
+    delStore(index) {
+      this.addShop--
+      this.form.taskGoodsList.splice(index - 1, 1)
+    },
+    handleGuanjc() {
+      if (this.addKeyWord < 10) {
+        this.addKeyWord++
+        this.form.taskCommentList.push({ keyword: null })
+      }
+    },
+    handletkl() {
+      if (this.addtkl < 10) {
+        this.addtkl++
+        this.form.taskCommentList.push({ keyword: null })
+      }
+    },
+    handleewm() {
+      if (this.addewm < 10) {
+        this.addewm++
+        this.form.taskCommentList.push({ qrCodeImgUrl: null })
+      }
+    },
+    handleAddGood() {
+      if (this.addShop < 3) {
+        this.addShop++
+        this.form.taskGoodsList.push({
+          name: null,
+          content: null,
+          url: null,
+          img: null,
+          showPrice: null,
+          realPrice: null,
+          payPeopleNum: null,
+          num: null,
+          mainFlag: 2,
+          tbkFlag: 2
+        })
+      }
+    },
+    // handleDearchType(val) {
+    //   if (val === 1) {
+    //     this.form.taskCommentList = [{ keyword: null }]
+    //   } else if (val === 2) {
+    //     this.form.taskCommentList = [{ keyword: null }]
+    //   } else {
+    //     this.form.taskCommentList = [{ qrCodeImgUrl: null }]
+    //   }
+    // },
+    handleCommentType(val) {
+      var length = 1
+      if (val === 2) {
+        this.form.taskCommentList = [{ type: 2, content: '' }]
+        if (length < this.form.orderNum) {
+          for (var i = length; i < this.form.orderNum; i++) {
+            this.wzList.push({ type: 2, content: '' })
+          }
+        }
+      } else if (val === 3) {
+        this.form.taskCommentList = [{
+          type: 3,
+          content: '',
+          norm: '',
+          imgUrl1: '',
+          imgUrl2: '',
+          imgUrl3: '',
+          imgUrl4: '',
+          imgUrl5: ''
+        }]
+        if (length < this.form.orderNum) {
+          for (var j = length; j < this.form.orderNum; j++) {
+            this.tpList.push({
+              type: 3,
+              content: '',
+              norm: '',
+              imgUrl1: '',
+              imgUrl2: '',
+              imgUrl3: '',
+              imgUrl4: '',
+              imgUrl5: ''
+            })
+          }
+        }
+      } else if (val === 4) {
+        this.form.taskCommentList = [{ type: 4, content: '', norm: '', videoUrl: '' }]
+        if (length < this.form.orderNum) {
+          for (var m = length; m < this.form.orderNum; m++) {
+            this.spList.push({ type: 4, content: '', norm: '', videoUrl: '' })
+          }
+        }
+      } else if (val === 1) {
+        this.form.taskCommentList = [{ type: 1 }]
+        this.taskCommentVal = val
+      }
+      this.init()
+    },
+    handleReleaseDate(val) {
+      this.handleChangeReleaseDate(true)
+      var myDate = new Date()
+      var month = myDate.getMonth() < 9 ? '0' + (myDate.getMonth() + 1) : myDate.getMonth() + 1
+      var day = myDate.getDate() < 9 ? '0' + (myDate.getDate()) : myDate.getDate()
+      var dataToDate = myDate.getFullYear() + '-' + month + '-' + day
+
+      if (val === dataToDate) {
+        this.hour24Show = myDate.getHours() + 1
+      } else {
+        this.hour24Show = 0
+      }
+    },
+    handleNext() {
+      if (this.orderAll !== this.form.orderNum) {
+        this.$message({
+          message: '发布的单量不正确',
+          type: 'warning'
+        })
+        return
+      }
+      this.hour24ToResult()
+      var age = this.age
+      var ageArray = age.split('-')
+      if (ageArray.length === 2) {
+        this.form.taskAdditionalIncrement.maxAge = ageArray[1]
+      }
+      this.form.taskAdditionalIncrement.minAge = ageArray[0]
+      // var data = Object.assign({},this.form);
+      var data = JSON.parse(JSON.stringify(this.form))
+      data.orderNum = this.orderAll
+      if (data.screenshotDetailIds.length > 0) {
+        // 进行货比的判断，输入进对比值
+        var numPass = this.screenshotDetails[0]
+        var arrList = []
+        if (numPass === 1) {
+          arrList = 1
+        } else if (numPass === 2) {
+          arrList = 1 + ',' + 2
+        } else if (numPass === 3) {
+          arrList = 1 + ',' + 2 + ',' + 3
+        } else {
+          arrList = 1 + ',' + 2 + ',' + 3 + ',' + 4
+        }
+        this.screenshotDetails = arrList
+        data.screenshotDetailIds.splice(0, 0, this.screenshotDetails)
+        data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+      } else {
+        data.screenshotDetailIds = null
+      }
+      if (data.taskAdditionalIncrement.goodsCategory.length > 0) {
+        data.taskAdditionalIncrement.goodsCategory = data.taskAdditionalIncrement.goodsCategory.join(',')
+      }
+      if (data.taskAdditionalIncrement.area.length > 0) {
+        data.taskAdditionalIncrement.area = data.taskAdditionalIncrement.area.join(',')
+      }
+      var otherKey = []
+      var num
+      if (this.form.commentType === 2) {
+        otherKey = this.wzList
+      } else if (this.form.commentType === 3) {
+        otherKey = this.tpList
+      } else if (this.form.commentType === 4) {
+        otherKey = this.spList
+      } else if (this.form.commentType === 1) {
+        otherKey = this.form.taskCommentList
+      }
+      if (this.form.searchType === 1) {
+        num = this.order1
+      } else if (this.form.searchType === 2) {
+        num = this.order2
+      } else if (this.form.searchType === 3) {
+        num = this.order3
+      }
+      // data.taskCommentList = this.stitchingData(this.form.taskCommentList, otherKey, this.form.orderNum)
+      this.form.storeId = this.store
+      this.form.storeTypeId = this.storeType
+      this.form.taskTypeId = this.taskType
+
+      data.taskAdditionalIncrement = JSON.stringify(data.taskAdditionalIncrement)
+      data.taskCommentList = JSON.stringify(otherKey)
+      data.taskGoodsList = JSON.stringify(data.taskGoodsList)
+      data.taskReleaseTimeList = JSON.stringify(data.taskReleaseTimeList)
+
+      create(data).then(response => {
+        if (response.code === 0) {
+          this.$parent.handlePrice(response.data)
+        } else {
+          this.$message({
+            message: response.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    stitchingData(keyword, otherKey, num) {
+      var data = []
+      var otherkeyItem = 0
+      for (var i = 0; i < keyword.length; i++) {
+        for (var j = 0; j < num[i]; j++) {
+          const item = {}
+          if (otherKey.length > 0) {
+            Object.assign(item, keyword[i], otherKey[otherkeyItem])
+          } else {
+            Object.assign(item, keyword[i])
+          }
+          otherkeyItem++
+          data.push(item)
+        }
+      }
+      return data
+    },
+    hour24ToResult() {
+      var array = new Array()
+      for (var i = 0; i < 24; i++) {
+        if (this.hour24Data[i] > 0) {
+          var hour
+          if (i < 10) {
+            hour = '0' + i
+          } else {
+            hour = i
+          }
+          array.push({
+            orderNum: this.hour24Data[i],
+            releaseTime: this.form.releaseDate + ' ' + hour + ':00:00'
+          })
+        }
+      }
+      this.form.taskReleaseTimeList = array
+    },
+    totalSearch() {
+      var count = 0
+      if (this.form.searchType === 1) {
+        this.order1.map(res => {
+          count += Number(res)
+        })
+      } else if (this.form.searchType === 2) {
+        this.order2.map(res => {
+          count += Number(res)
+        })
+      } else {
+        this.order3.map(res => {
+          count += Number(res)
+        })
+      }
+      return count
+    },
+    inputBlur(e) {
+      // if (e.target.value.indexOf('jd.com') === -1) {
+      //     console.log(e.target.value)
+      //     this.$message({
+      //         message: '商品链接不正确请重新输入',
+      //         type: 'warning'
+      //     })
+      //     return
+      // }
+    },
+    handleCheckBox(val) {
+      this.screenshotDetails = []
+      if (val.length >= 1) {
+        this.screenshotDetails[0] = val[val.length - 1]
+        this.form.screenshotDetailIds.splice(0, 0, this.screenshotDetails)
+      }
+    },
+    handleChangeReleaseDate(val) {
+      console.log(this.form.releaseDate)
+      if (this.form.releaseDate === null || this.form.releaseDate === '') {
+        this.$message({
+          message: '时间不能为空！',
+          type: 'warning'
+        })
+        this.isReleaseDate = false
+        return
+      }
+      if (val) {
+        this.orderAll = this.form.orderNum
+        var myDate = new Date()
+        var month = myDate.getMonth() < 9 ? '0' + (myDate.getMonth() + 1) : myDate.getMonth() + 1
+        var day = myDate.getDate() < 9 ? '0' + (myDate.getDate()) : myDate.getDate()
+        var dataToDate = myDate.getFullYear() + '-' + month + '-' + day
+        var allData = this.orderAll
+        var array = new Array()
+        let len = 0
+        if (allData) {
+          if (this.form.releaseDate && this.form.releaseDate === dataToDate) {
+            len = 24 - parseInt(myDate.getHours() + 1)
+            if (len > allData) {
+              len = allData
+            }
+            const Arr = this.randomArr(allData, 1, allData, len)
+            for (let j = myDate.getHours() + 1; j < 24; j++) {
+              const index = j - myDate.getHours() - 1
+              array[j] = Arr[index]
+            }
+          } else {
+            len = 24
+            if (len > allData) {
+              len = allData
+            }
+            const Arr = this.randomArr(allData, 1, allData, len)
+            for (var i = 0; i < 24; i++) {
+              array[i] = Arr[i]
+            }
+          }
+        }
+        this.hour24Data = array
+      }
+    },
+    randomArr(value, min, max, length) {
+      console.log('value:====' + value + 'min:====' + min + 'max:===' + max + 'length:===' + length)
+      var ran = []; var arrId
+      // 循环存放数组最小值
+      for (var i = 0; i < length; i++) {
+        ran[i] = min
+      }
+      // 计算剩下的值
+      var spare = value - (min * length)
+      while (spare > 0) {
+        // 生成数组随机ID
+        arrId = Math.round(Math.random() * length)
+        if (ran[arrId] < max) {
+          ran[arrId] += 1
+          spare--
+        }
+      }
+      console.log('ran ==========' + ran)
+      return ran
+    },
+    clickItemAge(index) {
+      index === this.age ? this.age = '' : this.age = index
+      console.log(index)
+    },
+    clickItem(index) {
+      index === this.form.taskAdditionalIncrement.sex ? this.form.taskAdditionalIncrement.sex = '' : this.form.taskAdditionalIncrement.sex = index
+      console.log(index)
+    }
+  }
+}
+</script>
+
+<style scoped>
+  .pr >>> .distpicker-address-wrapper select {
+    color: #97A8BE;
+    width: 100px;
+    height: 32px;
+    font-size: inherit;
+    padding: 0 .75rem;
+  }
+
+  .radio-none >>> .el-radio__input {
+    display: none;
+  }
+
+  .radio-none >>> .el-radio {
+    margin-right: 8px;
+  }
+
+  .radio-none >>> .el-radio__label {
+    padding-left: 0;
+  }
+
+  .radio-none >>> .el-radio--mini.is-bordered {
+    padding: 6px 9px 0 10px
+  }
+
+  .form .form-action {
+    width: 3em;
+  }
+
+  .form .form-action i {
+    font-size: 26px;
+    color: #6666FF
+  }
+
+  .boder-all {
+    border: 1px solid #BCBCBC
+  }
+
+  .table td {
+    border: 1px solid #6666FF;
+  }
+
+  .activity-button {
+    border-color: #6666FF !important;
+    color: #6666FF !important;
+  }
+
+  .radio-list .item {
+    padding-left: 10px;
+    display: flex;
+    color: #333;
+  }
+
+  .radio-list .radio {
+    margin-right: 4px;
+  }
+
+  .radio-list .radio-tip {
+    color: #BCBCBC;
+    font-size: 14px;
+  }
+
+  .radio-list-logo {
+    width: 25px;
+    position: relative;
+    top: 8px;
+    margin-right: 5px;
+  }
+
+  .radio-list >>> .el-radio__input.is-checked + .el-radio__label {
+    color: #606266;
+  }
+
+  .radio-list >>> .el-radio__input.is-checked .el-radio__inner {
+    border-color: #6666FF;
+    background: #6666FF;
+  }
+
+  .radio-list-new {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 1px;
+  }
+
+  .form .checkbox {
+    margin-left: 14px;
+  }
+
+  .item-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .radio-list-y >>> .el-radio-button__inner, .el-radio-group {
+    font-size: initial;
+    display: inline-block;
+    line-height: unset;
+    vertical-align: middle;
+  }
+
+  .addShop {
+    position: absolute;
+    right: 0;
+    top: 13px;
+  }
+
+  .step-title {
+    margin-top: 24px;
+    line-height: 32px;
+    text-align: center;
+    background-color: #6666FF;
+    color: white;
+    font-size: 16px;
+  }
+
+  .w400 {
+    width: 400px;
+  }
+
+  .form .form-err-change {
+    padding: 6px 0 6px 54px;
+    font-size: 12px;
+  }
+
+  .avatar-uploader {
+    border: 1px dashed #6666FF;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatar-uploader-remove {
+    position: absolute;
+    top: -16px;
+    right: 7px;
+    color: #6666FF;
+    font-size: 20px;
+  }
+
+  .avatar-uploader-remove-class {
+    top: -12px;
+    left: 249px;
+}
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
+
+  .epshow {
+    position: absolute;
+    left: 173px;
+    bottom: -29px;
+  }
+
+  .upload-d {
+    font-size: 12px;
+    position: absolute;
+    bottom: 0px;
+    color: #bcbcbc;
+  }
+
+  .upload-e {
+    position: absolute;
+    bottom: 0px;
+    right: 0;
+    font-size: 12px;
+  }
+
+  .form .form-label {
+    min-width: 7em;
+  }
+
+  .form-label-price {
+    min-width: 5em !important;
+    margin-left: 39px;
+  }
+
+  .form-label >>> .el-radio__input.is-checked .el-radio__inner {
+    border-color: #6666FF;
+    background: #6666FF;
+  }
+
+  .form-label >>> .el-radio__input.is-checked + .el-radio__label {
+    color: #606266;
+  }
+
+  .clock-list {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .clock-list .item {
+    margin-bottom: 16px;
+    width: 7.7%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #6666FF;
+  }
+
+  .clock-list .sp1 {
+    line-height: 32px;
+    background-color: #6666FF;
+    color: white;
+  }
+
+  .clock-list .sp2 {
+    padding: 0 8px;
+    width: 100%;
+    height: 32px;
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    box-sizing: border-box;
+  }
+
+  .checkbox-mr >>> .el-checkbox__inner {
+    width: 28px;
+    height: 28px
+  }
+
+  .checkbox-mr >>> .el-checkbox__input.is-checked .el-checkbox__inner::after {
+    transform: rotate(45deg) scaleY(3);
+  }
+
+  .checkbox-mr >>> .el-checkbox__inner::after {
+    left: 9px;
+    top: 7px;
+    width: 8px;
+  }
+
+  .checkbox-mr {
+    margin-right: 20px;
+    position: relative;
+    height: 54px;
+  }
+
+  .checkbox-tip {
+    color: red;
+    position: absolute;
+    font-size: 12px;
+    bottom: 0;
+    width: 70px;
+    right: 0;
+  }
+
+  .checkbox-button-width {
+    width: 82px
+  }
+
+  .form-item >>> .el-button--mini, .el-button--mini.is-round {
+    padding: 7px 7px;
+  }
+
+  .checkbox-list {
+    border: 1px solid #BCBCBC;
+    width: 500px;
+    height: 280px;
+    border-radius: 5px;
+    padding: 10px
+  }
+
+  /deep/ .el-textarea__inner {
+    border: 1px dashed #BCBCBC;
+  }
+
+  .remark {
+    width: 600px;
+    height: 100px;
+    border-radius: 5px;
+    padding: 10px;
+    color: #BCBCBC;
+    font-size: 12px
+  }
+
+  .activity-page >>> .el-dialog__header {
+    padding: 0
+  }
+
+  .activity-page >>> .el-dialog__body {
+    padding: 2px
+  }
+
+  /deep/ input::-webkit-outer-spin-button,
+  /deep/ input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  /deep/ input[type="number"] {
+    -moz-appearance: textfield;
+  }
+</style>
