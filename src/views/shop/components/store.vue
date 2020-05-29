@@ -1,6 +1,6 @@
 <template>
   <div class="store">
-    <el-button class="btn-theme" size="small" @click="(handelShowAdd(formName))">+新增店铺</el-button>
+    <el-button class="btn-theme" size="small" @click="(handelShowAdd())">+新增店铺</el-button>
     <div style="margin: 10px 0">
       <span style="color:#6666FF;font-size: 14px">温馨提示：</span>
       <span style="color: #97A8BE;font-size: 14px">商家账户可绑定多个店铺，切忌绑定他人店铺，恶搞同行，如有发现封号处理。</span>
@@ -393,38 +393,54 @@ export default {
 
     // 确定新增店铺
     handleAddStore() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          var patt1 = new RegExp(/\s+/g)
-          if (!patt1.test(this.form.storeName)) {
-            this.form.storeName.replace(/\s+/g, '')
-          }
-          addStore(this.form).then(response => {
-            if (response.code === 0) {
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-              this.dialogFormVisible = false
-              this.init()
-            } else if (response.code === 301) {
-              this.$message({
-                message: '店铺名称信息填写不正确',
-                type: 'warning'
-              })
-            } else {
-              this.$message({
-                message: response.msg,
-                type: 'warning'
-              })
-            }
-            this.init()
+      // this.$refs.form.validate(valid => {
+      //   if (valid) {
+      // var patt1 = new RegExp(/\s+/g)
+      // if (!patt1.test(this.form.storeName)) {
+      //   this.form.storeName.replace(/\s+/g, '')
+      // }
+      console.log('店铺数据', this.form)
+      this.form.storeName = this.form.storeName.replace(/^\s*|\s*$/g, '')
+      const dataList = {
+        address: this.form.address,
+        area: this.form.area,
+        province: this.form.province,
+        storeName: this.form.storeName,
+        storeTypeId: this.form.storeTypeId,
+        storeTypeName: this.form.storeTypeName,
+        city: this.form.city,
+        dataNum: this.form.dataNum,
+        name: this.form.name,
+        phone: this.form.phone,
+        tmallFlag: this.form.tmallFlag,
+        url: this.form.url
+      }
+      console.log('店铺数据', dataList)
+      addStore(dataList).then(response => {
+        if (response.code === 0) {
+          this.$message({
+            message: '添加成功',
+            type: 'success'
+          })
+          this.dialogFormVisible = false
+          this.init()
+        } else if (response.code === 301) {
+          this.$message({
+            message: '店铺名称信息填写不正确',
+            type: 'warning'
           })
         } else {
-          console.log('error submit!!')
-          return false
+          this.$message({
+            message: response.msg,
+            type: 'warning'
+          })
         }
       })
+      //   } else {
+      //     console.log('error submit!!')
+      //     return false
+      //   }
+      // })
     },
     initData() {
       this.form = {
@@ -443,21 +459,14 @@ export default {
         url: ''
       }
     },
-    handelShowAdd(formName) {
-      console.log('1212', this.tableData.length, this.tableData, this.storeType)
-      // this.initData()//暂定缓存问题，
-      this.$nextTick(() => {
-        console.log('naxtlimian123', formName)
-        // if (this.$refs[formName] !== undefined) {
-
-        this.$refs[formName].resetFields()
-
-        // }
-        // that.$refs[formName].resetFields()
-        console.log('naxtlimian', formName)
-      })
+    // 新增店铺方法
+    handelShowAdd() {
+      // this.$nextTick(() => {
+      //   this.$refs[formName].resetFields()
+      // })
       this.type = 'add'
       this.dialogFormVisible = true
+      this.init()
     },
     handelShowEdit(val) {
       this.showStore = val
@@ -527,16 +536,8 @@ export default {
     claerbuttom(formName) {
       // var that = this
       this.dialogFormVisible = false
-      this.$nextTick(() => {
-        console.log('naxtlimian123', formName)
-        // if (that.$refs[formName] !== undefined) {
-
-        //   that.$refs[formName].resetFields();
-
-        // }
-        // that.$refs[formName].resetFields()
-        console.log('naxtlimian', formName)
-      })
+      // this.$nextTick(() => {
+      // })
       this.initData()
     }
   }
