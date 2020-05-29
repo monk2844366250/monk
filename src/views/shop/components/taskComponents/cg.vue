@@ -301,7 +301,7 @@ export default {
         status: this.queryList.status,
         commentType: this.queryList.commentType,
         startTime: this.timeRange[0],
-        endTime: this.timeRange[1] + 1
+        endTime: this.timeRange[1]
       }
 
       taskFindList(listData).then(response => {
@@ -314,74 +314,81 @@ export default {
     // 待放单跳转
     waitReleaseNumbuttom(data) {
 
-      const param = {
-        data: data,
-        type: '任务管理'
-      }
-      this.$router.push({ path: 'order', query: param })
+      // const param = {
+      //   data: data,
+      //   type: '任务管理'
+      // }
+      // this.$router.push({ path: 'order', query: param })
     },
     // 待接单跳转
     waitAcceptNumbuttom(data) {
-
-      const param = {
-        data: data,
-        type: '任务管理'
+      if (data.waitAcceptNum > 0) {
+        const param = {
+          data: data,
+          type: '任务管理'
+        }
+        this.$router.push({ path: 'order', query: param })
       }
-      this.$router.push({ path: 'order', query: param })
     },
     // 待操作跳转
     waitOperationNumbuttom(data) {
-
-      const param = {
-        data: data,
-        type: '任务管理'
+      if (data.waitOperationNum > 0) {
+        const param = {
+          data: data,
+          type: '任务管理'
+        }
+        this.$router.push({ path: 'order', query: param })
       }
-      this.$router.push({ path: 'order', query: param })
     },
     // 待返款跳转
     waitRefundsNumbuttom(data) {
-
-      const param = {
-        data: data,
-        type: '任务管理'
+      if (data.waitRefundsNum > 0) {
+        const param = {
+          data: data,
+          type: '任务管理'
+        }
+        this.$router.push({ path: 'order', query: param })
       }
-      this.$router.push({ path: 'order', query: param })
     },
     // 待评价跳转
     waitCommentNumbuttom(data) {
-
-      const param = {
-        data: data,
-        type: '任务管理'
+      if (data.waitCommentNum > 0) {
+        const param = {
+          data: data,
+          type: '任务管理'
+        }
+        this.$router.push({ path: 'order', query: param })
       }
-      this.$router.push({ path: 'order', query: param })
     },
     // 待确认跳转
     waitConfirmNumbuttom(data) {
-
-      const param = {
-        data: data,
-        type: '任务管理'
+      if (data.waitConfirmNum > 0) {
+        const param = {
+          data: data,
+          type: '任务管理'
+        }
+        this.$router.push({ path: 'order', query: param })
       }
-      this.$router.push({ path: 'order', query: param })
     },
     // 已完成跳转
     alreadyCompleteNumbuttom(data) {
-
-      const param = {
-        data: data,
-        type: '任务管理'
+      if (data.alreadyCompleteNum > 0) {
+        const param = {
+          data: data,
+          type: '任务管理'
+        }
+        this.$router.push({ path: 'order', query: param })
       }
-      this.$router.push({ path: 'order', query: param })
     },
     // 已撤销跳转
     alreadyRevokeNumbuttom(data) {
-
-      const param = {
-        data: data,
-        type: '任务管理'
+      if (data.alreadyRevokeNum > 0) {
+        const param = {
+          data: data,
+          type: '任务管理'
+        }
+        this.$router.push({ path: 'order', query: param })
       }
-      this.$router.push({ path: 'order', query: param })
     },
     handleChangePage(type) {
       if (type) {

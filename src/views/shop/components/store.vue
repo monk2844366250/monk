@@ -390,9 +390,15 @@ export default {
         }
       })
     },
+
+    // 确定新增店铺
     handleAddStore() {
       this.$refs.form.validate(valid => {
         if (valid) {
+          var patt1 = new RegExp(/\s+/g)
+          if (!patt1.test(this.form.storeName)) {
+            this.form.storeName.replace(/\s+/g, '')
+          }
           addStore(this.form).then(response => {
             if (response.code === 0) {
               this.$message({
@@ -403,7 +409,7 @@ export default {
               this.init()
             } else if (response.code === 301) {
               this.$message({
-                message: 'response.msg，信息填写不正确',
+                message: '店铺名称信息填写不正确',
                 type: 'warning'
               })
             } else {
@@ -412,6 +418,7 @@ export default {
                 type: 'warning'
               })
             }
+            this.init()
           })
         } else {
           console.log('error submit!!')

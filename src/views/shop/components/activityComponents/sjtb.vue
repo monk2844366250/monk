@@ -718,6 +718,28 @@
           <span v-if="childImgItem.amount>0" class="checkbox-tip">+{{ childImgItem.amount }}金币/单</span>
         </div>
       </el-checkbox-group>
+      <!-- <el-checkbox-group
+        v-if="imgItem.name === '浏览商品'"
+        v-model="screenshotDetaildata"
+        style="display: flex;"
+        @change="handleCheckData"
+      >
+        <div
+          v-for="childImgItem in imgItem.taskScreenshotCategoryDetailList"
+          class="checkbox-mr"
+          style="width: 135px"
+        >
+          <el-checkbox :label="childImgItem.id">
+            <div
+              class="checkbox-button-width"
+              style="border: 1px solid #DCDFE6;padding: 5px 7px;width: 105px;height:28px;text-align: center"
+            >
+              {{ childImgItem.name }}
+            </div>
+          </el-checkbox>
+          <span v-if="childImgItem.amount>0" class="checkbox-tip">+{{ childImgItem.amount }}金币/单</span>
+        </div>
+      </el-checkbox-group> -->
       <el-checkbox-group v-else v-model="form.screenshotDetailIds" style="display: flex;">
         <div
           v-for="(childImgItem, index) in imgItem.taskScreenshotCategoryDetailList"
@@ -1073,6 +1095,7 @@ export default {
       orderAll: 0,
       inputAll: 0, // 总单数
       screenshotDetails: [], // 存放搜索货比的值
+      screenshotDetaildata: [], // 存放浏览商品的值
       form: {
         taskGoodsList: [{
           name: null,
@@ -1122,9 +1145,6 @@ export default {
       },
       sortList: [{ name: '视频' }],
       imgList: [],
-      // imgList: [{
-      //   taskScreenshotCategoryDetailList: []
-      // }],
       age: '',
       area: '',
       isReleaseDate: false,
@@ -1601,6 +1621,21 @@ export default {
           }
           data.screenshotDetailIds.splice(0, 0, arrList)
         }
+        // if (this.screenshotDetaildata.length !== 0) {
+        // // 进行货比的判断，输入进对比值
+        //   var dataPass = this.screenshotDetaildata[0]
+        //   var dataList = []
+        //   if (dataPass === 5) {
+        //     dataList = 5
+        //   } else if (dataPass === 6) {
+        //     dataList = 5 + ',' + 6
+        //   } else if (dataPass === 7) {
+        //     dataList = 5 + ',' + 6 + ',' + 7
+        //   } else {
+        //     dataList = ''
+        //   }
+        //   data.screenshotDetailIds.splice(0, 0, dataList)
+        // }
         data.screenshotDetailIds = data.screenshotDetailIds.join(',')
       } else {
         data.screenshotDetailIds = null
@@ -1717,6 +1752,13 @@ export default {
         this.form.screenshotDetailIds.splice(0, 0, this.screenshotDetails)
       }
     },
+    // handleCheckData(val) {
+    //   this.screenshotDetaildata = []
+    //   if (val.length >= 1) {
+    //     this.screenshotDetaildata[0] = val[val.length - 1]
+    //     this.form.screenshotDetailIds.splice(0, 0, this.screenshotDetaildata)
+    //   }
+    // },
     handleChangeReleaseDate(val) {
       console.log(this.form.releaseDate)
       if (this.form.releaseDate === null || this.form.releaseDate === '') {

@@ -178,7 +178,7 @@ export default {
         type: this.queryList.type,
         status: this.queryList.status,
         startTime: this.timeRange[0],
-        endTime: this.timeRange[1] + 1,
+        endTime: this.timeRange[1],
         pageNum: this.queryList.pageNum,
         pageSize: this.queryList.pageSize
       }

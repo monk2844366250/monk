@@ -452,7 +452,7 @@ export default {
         storeName: this.query.storeName,
         thirdOrderNo: this.query.thirdOrderNo,
         startTime: this.timeRange[0],
-        endTime: this.timeRange[1] + 1
+        endTime: this.timeRange[1]
       }
       orderList(listData).then(response => {
         this.tableData = response.data.rows

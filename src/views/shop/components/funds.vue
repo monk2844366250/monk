@@ -8,7 +8,7 @@
         <div style="position: absolute;right: 44px"><el-button class="btn-theme" size="mini" @click="dialogFormVisibleTrue">佣金充值</el-button></div>
       </div>
 
-      <div class="search-flex" style="margin-bottom: 10px">
+      <div class="search-flex" style="margin-bottom: 20px">
         <div class="item">
           <span class="lb">账户类型：</span>
           <el-select v-model="queryList.flag" style="width: 90px" size="mini">
@@ -81,7 +81,7 @@
         佣金充值
       </div>
       <div style="margin: 15px 0">
-        1金币=1元。
+        1金币=1元
       </div>
       <el-form ref="form" :model="form" :rules="formRules">
         <el-form-item prop="money">
@@ -116,6 +116,7 @@ export default {
   data() {
     var valiNumberPass1 = (rule, value, callback) => { // 包含小数的数字
       const reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g
+      // const res = /^\d+(\.\d{2})?$/g
       if (value === '') {
         callback(new Error('请输入内容'))
       } else if (!reg.test(value)) {
@@ -225,20 +226,23 @@ export default {
         this.init()
       }
     },
+    // 搜索
     search() {
       const listData = {
         flag: this.queryList.flag,
         type: this.queryList.type,
+        pageNum: this.queryList.pageNum,
+        pageSize: this.queryList.pageSize,
         startTime: this.timeRange[0],
-        endTime: this.timeRange[1] + 1
+        endTime: this.timeRange[1]
       }
-      console.log('list', listData)
+      console.log('搜索数据', listData)
       selectYwCapitalRecordList(listData).then(response => {
         this.list = response.data.rows
-        console.log('list', this.list)
+        // this.init()
+        console.log('显示数据', this.list)
         this.total = Math.ceil(response.data.total / this.queryList.pageSize)
       })
-      this.init()
     },
     // 导出
     exportExcel() {
@@ -265,33 +269,41 @@ export default {
       //   if (valid) {
       // this.form = this.form.money.map(Number)
       this.form.money = Number(this.form.money)
-      console.log('form', this.form)
-      addCommission(this.form).then(response => {
-        if (response.code === 0) {
-          this.$message({
-            message: '充值成功',
-            type: 'success'
-          })
-          setTimeout(function() {
-            window.location.reload()
-          }, 700)
-        } else {
-          this.$message({
+      const res = /^\d+(\.\d{2})?$/g
+      if (!res.test(this.form.money)) {
+        this.$message({
+          message: '充值金额只保留两位小数',
+          type: 'error'
+        })
+      } else {
+        console.log('form', this.form)
+        addCommission(this.form).then(response => {
+          if (response.code === 0) {
+            this.$message({
+              message: '充值成功',
+              type: 'success'
+            })
+            setTimeout(function() {
+              window.location.reload()
+            }, 700)
+          } else {
+            this.$message({
             // message: response.msg,
-            message: response.msg,
-            type: 'warning'
-          })
-          setTimeout(function() {
-            window.location.reload()
-          }, 700)
-        }
-        this.dialogFormVisible = false
-        // this.init()
-        this.balance = this.$store.getters.balance
-        this.brokerageBalance = this.$store.getters.brokerageBalance
-        this.freezeBalance = this.$store.getters.freezeBalance
-        console.log('失败还是要拿取数据', this.balance, this.brokerageBalance, this.freezeBalance)
-      })
+              message: response.msg,
+              type: 'warning'
+            })
+            setTimeout(function() {
+              window.location.reload()
+            }, 700)
+          }
+          this.dialogFormVisible = false
+          // this.init()
+          this.balance = this.$store.getters.balance
+          this.brokerageBalance = this.$store.getters.brokerageBalance
+          this.freezeBalance = this.$store.getters.freezeBalance
+          console.log('失败还是要拿取数据', this.balance, this.brokerageBalance, this.freezeBalance)
+        })
+      }
 
       //   } else {
       //     console.log('error submit!!')

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="feedback-page">
-      <div class="search">
+      <div class="search" style="margin: 10px 0;">
         <div class="item">
           <span class="lb">时间：</span>
           <el-date-picker
@@ -32,7 +32,7 @@
           <th>反馈时间</th>
           <th>反馈类型</th>
           <th style="width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">问题描述</th>
-          <th>回复</th>
+          <!-- <th>回复</th> -->
           <th>操作</th>
         </tr>
         <tr v-for="item in list">
@@ -48,7 +48,7 @@
           <td>{{ item.createTime }}</td>
           <td>{{ item.type===1?'系统优化':item.type===2?'服务建议':'其他' }}</td>
           <td>{{ item.content }}</td>
-          <td>{{ null }}</td>
+          <!-- <td>{{ null }}</td> -->
           <td>
             <span class="opp" @click="handleDetail(item.id)">详情</span>
             <span class="opp" @click="handleRemoveFeedback(item.id)">删除</span>
@@ -86,7 +86,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item>
-                <div slot="label" style="color: #97A8BE">反馈内容</div>
+                <div slot="label" style="color: #97A8BE">反馈内容:</div>
                 <el-input
                   v-model="addToggleForm.content"
                   style="width: 100%"
@@ -100,7 +100,7 @@
 
           <el-form-item>
             <div slot="label" style="color: #97A8BE;">
-              添加图片
+              添加图片:
               <span style="color: #BCBCBC;font-size: 12px;margin-left: 10px">(大小在3M以内)</span>
             </div>
             <div style="height: 100px;width: 100%;display: flex;">
@@ -130,7 +130,7 @@
         <div class="dialog-close" @click="closeDetailDialog" />
         <div class="appealDetail">
           <div class="flexCSB">
-            <div class="flex1">反馈类型：
+            <div class="flex1">反馈类型:
               <el-select v-model="detail.type" size="mini">
                 <el-option
                   v-for="item in typeList"
@@ -146,7 +146,7 @@
               <li class="item">
                 <div class="time">{{ detail.createTime }}</div>
                 <div class="con">
-                  <span class="label">反馈类型：</span>
+                  <span class="label">反馈类型:</span>
                   <div class="flex1">
                     <div class="p">{{ detail.content }}</div>
                     <img v-if="detail.imgUrl" :src="detail.imgUrl" alt class="img">
@@ -156,7 +156,7 @@
               <li v-for="items in feedbackReplyList" class="item">
                 <!-- <div class="time">{{item.createTime}}</div> -->
                 <div class="con">
-                  <span class="label">官方回复：</span>
+                  <span class="label">{{items.userType === 1 ? '商家' : '平台'}}</span>
                   <div class="flex1">
                     <div class="p">{{ items.content }}</div>
                     <img v-if="items.imgUrl" :src="items.imgUrl" alt class="img">
@@ -281,7 +281,7 @@ export default {
         pageNum: this.queryList.pageNum,
         pageSize: this.queryList.pageSize,
         startTime: this.timeRange[0],
-        endTime: this.timeRange[1] + 1
+        endTime: this.timeRange[1]
       }
       feedbackList(feedbackdata).then(response => {
         console.log(response)
@@ -417,7 +417,7 @@ export default {
     // 翻页
     handleChangePage(type) {
       if (type) {
-        if (this.queryList.pageNum < this.pagetotal ) {
+        if (this.queryList.pageNum < this.pagetotal) {
           this.queryList.pageNum++
           this.init()
         }
@@ -429,7 +429,7 @@ export default {
       }
     },
     handlePageIn() {
-      if (this.pageIn <= this.pagetotal  && this.pageIn > 0) {
+      if (this.pageIn <= this.pagetotal && this.pageIn > 0) {
         this.queryList.pageNum = this.pageIn
         this.init()
       } else if (this.pageIn > this.pagetotal) {

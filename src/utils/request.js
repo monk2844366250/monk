@@ -5,24 +5,25 @@ import { getToken } from '@/utils/auth'
 import md5 from 'js-md5'
 import qs from 'qs'
 // create an axios instance
+
 // const service = axios.create({
 //   baseURL: 'http://192.168.1.20:82/api/', // url = base url + request url
 //   // withCredentials: true, // send cookies when cross-domain requests
 //   timeout: 20000 // request timeout
-
 // })
+
 // const service = axios.create({
-//   baseURL: 'http://192.168.1.20:82/api/', // url = base url + request url
+//   baseURL: 'http://www.dxer168.com/api/', // url = base url + request url
 //   // withCredentials: true, // send cookies when cross-domain requests
 //   timeout: 20000 // request timeout
-
 // })
+
 const service = axios.create({
   baseURL: 'http://193.112.147.210:82/api/', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 20000 // request timeout
-
 })
+
 var loadingInstance
 function objKeySort(obj) { // 排序的函数
   var newkey = Object.keys(obj).sort()

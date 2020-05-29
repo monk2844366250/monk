@@ -114,7 +114,7 @@
           <div class="form-item">
             <div class="form-required">*</div>
             <div class="form-label">转账金额</div>
-            <el-input v-model="addForm.money" class="form-block" type="text" placeholder="转账金额" maxlength="10" @input="handleInputId2($event)" />
+            <el-input v-model="addForm.money" class="form-block" type="text" placeholder="转账金额" maxlength="9" @input="handleInputId2($event)" />
           </div>
           <div class="form-item">
             <div class="form-required" />

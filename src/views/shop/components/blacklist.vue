@@ -1,8 +1,8 @@
 <template>
   <div class="blacklist-page">
-    <div class="search">
+    <div class="search" style="margin:10px 0;">
       <div class="item">
-        <span class="lb">用户ID:</span>
+        <span class="lb">用户ID:&nbsp;&nbsp;&nbsp;</span>
         <input v-model="queryList.userId" class="ipt" type="text">
       </div>
       <button class="btn btn-add" @click="openAddDialog">+添加黑名单</button>
@@ -278,30 +278,31 @@ export default {
             message: '成功',
             type: 'success'
           })
+          this.init()
         }
       })
       this.addToggle = false
-      this.init()
       this.reason = ''
       this.userData = ''
     },
-    handleAddYwBlack() {
-      AddBlack(this.addToggleForm).then(response => {
-        if (response.code === 0) {
-          this.$message({
-            message: '提交成功',
-            type: 'success'
-          })
-          this.addToggle = false
-          this.init()
-        } else {
-          this.$message({
-            message: response.msg,
-            type: 'warning'
-          })
-        }
-      })
-    },
+    // handleAddYwBlack() {
+    //   AddBlack(this.addToggleForm).then(response => {
+    //     if (response.code === 0) {
+    //       this.init()
+    //       this.$message({
+    //         message: '黑名单添加成功',
+    //         type: 'success'
+    //       })
+    //       this.addToggle = false
+    //       // this.init()
+    //     } else {
+    //       this.$message({
+    //         message: response.msg,
+    //         type: 'warning'
+    //       })
+    //     }
+    //   })
+    // },
     checkedAll() {
       console.log(this.checked)
       var checkObj = document.querySelectorAll('.checkItem') // 获取所有checkbox项
@@ -321,7 +322,7 @@ export default {
     // 翻页
     handleChangePage(type) {
       if (type) {
-        if (this.queryList.pageNum < this.pagetotal ) {
+        if (this.queryList.pageNum < this.pagetotal) {
           this.queryList.pageNum++
           this.init()
         }
@@ -333,7 +334,7 @@ export default {
       }
     },
     handlePageIn() {
-      if (this.pageIn <= this.pagetotal  && this.pageIn > 0) {
+      if (this.pageIn <= this.pagetotal && this.pageIn > 0) {
         this.queryList.pageNum = this.pageIn
         this.init()
       } else if (this.pageIn > this.pagetotal) {

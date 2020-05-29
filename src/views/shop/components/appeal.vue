@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="appeal-page">
+    <div class="appeal-page" style="margin: 10px 0;">
       <div class="search">
         <div class="item">
           <span class="lb">申诉原因：</span>
@@ -128,7 +128,7 @@
             <el-col :span="24">
               <el-form-item>
                 <div slot="label" style="color: #97A8BE">
-                  申诉说明
+                  申诉说明:
                 </div>
                 <el-input
                   v-model="addToggleForm.content"
@@ -143,7 +143,7 @@
 
           <el-form-item>
             <div slot="label" style="color: #97A8BE;">
-              添加图片证据
+              添加图片证据:
               <span style="color: #BCBCBC;font-size: 12px;margin-left: 10px">(最多两张照片，大小在3M以内)</span>
             </div>
             <div style="height: 100px;width: 100%;display: flex;">
@@ -218,7 +218,7 @@
           </div>
           <div class="tareaWrap">
             <textarea v-model="recallData" class="tarea" />
-            <img v-if="addToggleForm.img1" :src="addToggleForm.img1" class="avatar" style="height: 100px;width: 100px">
+            <!-- <img v-if="addToggleForm.img1" :src="addToggleForm.img1" class="avatar" style="height: 100px;width: 100px"> -->
           </div>
           <div class="botBtn" style="display:flex;justify-content:space-around;">
             <!-- business/addYwAppealReply -->
@@ -254,7 +254,7 @@
       <div class="dialog-wrap">
         <div class="dialog-title">完结申诉</div>
         <div class="dialog-close" @click="closeEndDialog" />
-        <div class="dialog-center">确定完结任务申诉？？？</div>
+        <div class="dialog-center">确定完结任务申诉？</div>
         <div class="dialog-bot">
           <button class="btn" @click="closeEndDialog">取消</button>
           <button class="btn" @click="openendYwAppeal(appeal.orderId)">提交</button>
@@ -265,7 +265,7 @@
       <div class="dialog-wrap">
         <div class="dialog-title">删除申诉</div>
         <div class="dialog-close" @click="closeDelDialog" />
-        <div class="dialog-center">确定删除活动申诉？？？</div>
+        <div class="dialog-center">确定删除活动申诉?</div>
         <div class="dialog-bot">
           <button class="btn">取消</button>
           <button class="btn" @click="openDelDialog(appeal.orderId)">提交</button>
@@ -435,7 +435,7 @@ export default {
         status: this.queryList.status,
         orderId: this.queryList.orderId,
         startTime: this.timeRange[0],
-        endTime: this.timeRange[1] + 1,
+        endTime: this.timeRange[1],
         pageNum: this.queryList.pageNum,
         pageSize: this.queryList.pageSize
       }
