@@ -126,6 +126,7 @@
               v-model="form.invite"
               type="text"
               value=""
+              :disabled="trueOrFalse"
               class="validate"
               placeholder="邀请码"
               onfocus="this.placeholder=''"
@@ -224,6 +225,7 @@ export default {
   created() {
     // var s=this.$md5('password=e10adc3949ba59abbe56e057f20f883e&phone=15659750709&qqNum=123456&vcode=387434&appkey=H5V2B7&timestamp=1583310698')
     // console.log(s);
+    this.init()
   },
   mounted() {
     main()
@@ -232,8 +234,11 @@ export default {
   methods: {
     init() {
       var textUrl = window.location.href
-      var textList = textUrl.split('?inviteCode=')
-      this.invite = textList[1]
+      if (textUrl.indexOf('inviteCode=') !== -1) {
+        var textList = textUrl.split('?inviteCode=')
+        this.form.invite = textList[1]
+        this.trueOrFalse = true
+      }
     },
     changeUid(uid) {
       this.captchaUid = uid

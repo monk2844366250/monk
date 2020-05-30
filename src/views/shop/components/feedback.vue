@@ -22,7 +22,7 @@
       <table class="table">
         <tr>
           <th>
-            <div class="checkbox">
+            <div class="checkbox" style="width:40px;">
               <input v-model="checked" class="chk-ipt" type="checkbox" @click="checkedAll">
               <span class="chk-out">
                 <span class="chk-in" />
@@ -31,7 +31,7 @@
           </th>
           <th>反馈时间</th>
           <th>反馈类型</th>
-          <th style="width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">问题描述</th>
+          <th style="width: 400px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">问题描述</th>
           <!-- <th>回复</th> -->
           <th>操作</th>
         </tr>
@@ -156,15 +156,22 @@
               <li v-for="items in feedbackReplyList" class="item">
                 <!-- <div class="time">{{item.createTime}}</div> -->
                 <div class="con">
-                  <span class="label">{{items.userType === 1 ? '商家' : '平台'}}</span>
+                  <span class="label">{{ items.userType === 1 ? '商家' : '平台' }}:</span>
                   <div class="flex1">
                     <div class="p">{{ items.content }}</div>
-                    <img v-if="items.imgUrl" :src="items.imgUrl" alt class="img">
+                    <img v-if="items.imgUrl" :src="items.imgUrl" alt class="img" :preview-src-list="items.imgUrl" @click="toBigImg(items)">
                     <!-- <img src="@/assets/images/goodsImg.jpg" alt class="img"> -->
                   </div>
                 </div>
               </li>
             </ul>
+            <el-dialog
+              width="37%"
+              :visible.sync="innerVisible"
+              append-to-body
+            >
+              <img v-if="toImg" :src="toImg" style="width:520px;">
+            </el-dialog>
           </div>
           <div class="tareaWrap">
             <textarea v-model="backContent" class="tarea" />
@@ -207,6 +214,7 @@ export default {
       detailToggle: false,
       endToggle: false,
       delToggle: false,
+      innerVisible: false,
       recallImg: null,
       pageIn: null,
       typeList: [
@@ -239,6 +247,7 @@ export default {
         content: '',
         img: null
       }],
+      toImg: null,
       checkall: [],
       checked: false,
       pagetotal: 1,
@@ -436,6 +445,12 @@ export default {
         this.queryList.pageNum = 1
         this.init()
       }
+    },
+    // 放大图片
+    toBigImg(items) {
+      console.log('放大图片')
+      this.toImg = items.imgUrl
+      this.innerVisible = true
     },
     timeChange(val) {
       if (val === null) {

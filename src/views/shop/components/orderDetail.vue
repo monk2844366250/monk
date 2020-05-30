@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position:relative;">
     <div style="margin-bottom: 10px">
       <span style="font-weight: bold">订单信息</span>
       <el-button size="mini" class="btn-theme" style="float: right;padding: 3px 12px;" @click="dialogFormVisible=true">申诉</el-button>
@@ -38,15 +38,21 @@
         <td>
           {{ item.wordContent }}
           <div v-if="item.imgContent.length > 0" style="display:inline-block;margin:0;padding:0;">
-            <a v-for="childItem in item.imgContent" :href="childItem.imgUrl" target="_blank">
+            <img :src="childItem.imgUrl" @click="toBigImg(childItem.imgUrl)" :preview-src-list="childItem.imgUrl" style="display:inline-block;width: 30px; height: 20px;margin:0;padding:2px;">
+            <!-- <a v-for="childItem in item.imgContent" :href="childItem.imgUrl" target="_blank">
               <img :src="childItem.imgUrl" style="display:inline-block;width: 30px; height: 20px;margin:0;padding:2px;">
-            </a>
+            </a> -->
           </div>
         </td>
       </tr>
 
     </table>
 
+    <div v-if="toBigTrue === true" style="width:100%;height:730px;background: rgba(0, 0, 0, .25); position:fixed;top:0;left:0;">
+      <img :src="urlToImg" style="position:absolute;right:80px;top:40px;width:40px;" @click="imgTOFalse">
+      <!-- <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" style="width:500px;position:absolute;right:500px;top:100px;"> -->
+      <img :src="toImg" style="width:500px;position:absolute;right:500px;top:100px;">
+    </div>
     <el-dialog title="发起申诉" :visible.sync="dialogFormVisible" width="550px">
       <el-form :model="form">
         <el-row :gutter="20">
@@ -122,12 +128,16 @@
 </template>
 
 <script>
+const urlImg = require('@/assets/web/retesk.jpg')
 import { addYwAppeal } from '@/api/shop'
 import { uploadImage } from '@/utils'
 export default {
   name: 'OrderDetail',
   data() {
     return {
+      urlToImg: urlImg,
+      toBigTrue: false,
+      toImg: null,
       operationStepList: [{
         wordContent: '',
         taskStep: '',
@@ -258,6 +268,17 @@ export default {
           })
         }
       })
+    },
+    // 展示大图
+    toBigImg(data) {
+      console.log('展示大图')
+      this.toBigTrue = true
+      this.toImg = data
+    },
+    // 点击消失
+    imgTOFalse() {
+      console.log('点击消失')
+      this.toBigTrue = false
     },
     handleRemove(file, fileList) {
       console.log('sdasd', file, fileList)

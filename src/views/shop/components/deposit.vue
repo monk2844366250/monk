@@ -114,7 +114,7 @@
           <div class="form-item">
             <div class="form-required">*</div>
             <div class="form-label">转账金额</div>
-            <el-input v-model="addForm.money" class="form-block" type="text" placeholder="转账金额" maxlength="9" @input="handleInputId2($event)" />
+            <el-input v-model="addForm.money" class="form-block" type="text" placeholder="转账金额" maxlength="" @input="handleInputId2($event)" />
           </div>
           <div class="form-item">
             <div class="form-required" />
@@ -226,7 +226,8 @@ export default {
       var method = (options.Method || 'get').toLowerCase()
       var key = options.Key || ''
       var pathname = key.indexOf('/') === 0 ? key : '/' + key
-      const urlHeard = process.env.VUE_APP_BASE_API
+      // const urlHeard = process.env.VUE_APP_BASE_API
+      const urlHeard = 'https://web.dxer168.com/api/'
       var url = urlHeard + 'common/getCosToken'
       var xhr = new XMLHttpRequest()
       var data = {

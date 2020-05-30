@@ -461,9 +461,6 @@ export default {
     },
     // 新增店铺方法
     handelShowAdd() {
-      // this.$nextTick(() => {
-      //   this.$refs[formName].resetFields()
-      // })
       this.type = 'add'
       this.dialogFormVisible = true
       this.init()

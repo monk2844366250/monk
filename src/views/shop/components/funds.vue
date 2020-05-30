@@ -170,7 +170,9 @@ export default {
       },
       balance: 0,
       brokerageBalance: 0,
-      freezeBalance: 0
+      freezeBalance: 0,
+      moneyTypedata: '',
+      moneyflagdata: ''
     }
   },
   // watch: {
@@ -247,6 +249,13 @@ export default {
     // 导出
     exportExcel() {
       console.log('导出asd')
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].moneyType === 1) {
+          this.moneyTypedata = '收'
+        } else if(this.list[i].moneyType === 2) {
+          this.moneyTypedata = '支'
+        }
+      }
       // excel数据导出
       require.ensure([], () => {
         const {

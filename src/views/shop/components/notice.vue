@@ -1,5 +1,7 @@
 <template>
   <div class="notice-page">
+    <div v-if="list.length === 0" style="display:flex;justify-content:center;"><span style="margin:10px auto;">暂无数据</span></div>
+    <!-- <p v-if="list.length === 0" style="margin:0 auto;display:inline-block;">暂无数据</p> -->
     <ul class="notice-list">
       <li v-for="(item,index) in list" class="item">
         <a class="title" @click="handleDetail(item.id)">({{ ++index }}) {{ item.title }}</a>

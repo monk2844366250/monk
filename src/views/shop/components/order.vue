@@ -334,8 +334,6 @@ export default {
       var goodsdatas = {}
       goodsdatas = this.$route.query
       if (goodsdatas.type === '任务管理') {
-        console.log('体哦啊转完毕，数据携带完毕u', goodsdatas.data.status)
-        console.log('体哦啊转完毕，数据携带完毕u', goodsdatas.data)
         var statusData = null
         if (goodsdatas.data.waitReleaseNum > 0) {
           statusData = 1
@@ -515,6 +513,7 @@ export default {
             message: '返款完成！',
             type: 'success'
           })
+          this.init()
         } else {
           this.$message({
             message: response.msg,
@@ -534,6 +533,7 @@ export default {
             message: '返款完成！',
             type: 'success'
           })
+          this.init()
         } else {
           this.$message({
             message: response.msg,
@@ -556,6 +556,7 @@ export default {
             message: '换人成功！',
             type: 'success'
           })
+          this.init()
         } else {
           this.$message({
             message: response.msg,
@@ -572,6 +573,7 @@ export default {
             type: 'success'
           })
           this.dialogFormVisible = false
+          this.init()
         } else {
           this.$message({
             message: response.msg,

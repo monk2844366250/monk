@@ -12,17 +12,17 @@ import qs from 'qs'
 //   timeout: 20000 // request timeout
 // })
 
-const service = axios.create({
-  baseURL: 'http://web.dxer168.com/api/', // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 20000 // request timeout
-})
-
 // const service = axios.create({
-//   baseURL: 'http://193.112.147.210:82/api/', // url = base url + request url
+//   baseURL: 'https://web.dxer168.com/api/', // url = base url + request url
 //   // withCredentials: true, // send cookies when cross-domain requests
 //   timeout: 20000 // request timeout
 // })
+
+const service = axios.create({
+  baseURL: 'http://193.112.147.210:82/api/', // url = base url + request url
+  // withCredentials: true, // send cookies when cross-domain requests
+  timeout: 20000 // request timeout
+})
 
 var loadingInstance
 function objKeySort(obj) { // 排序的函数
@@ -43,6 +43,7 @@ function isEmpty(obj) {
 var self = this
 // request interceptor
 service.interceptors.request.use(
+  // loading等待
   config => {
     // do something before request is sent
     var code = ''
@@ -58,6 +59,7 @@ service.interceptors.request.use(
     //   background: 'rgba(0, 0, 0, 0.7)',
     //   text: 'Loading'
     // })
+    // token
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key

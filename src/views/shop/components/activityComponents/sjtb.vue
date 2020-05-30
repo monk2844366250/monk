@@ -78,6 +78,7 @@
         <span class="form-label form-label-price">实际成交价：</span>
         <el-input
           v-model.number="form.taskGoodsList[item-1].realPrice"
+          type="number"
           size="mini"
           :min="0"
           style="width: 140px"
@@ -87,6 +88,7 @@
         <span class="form-label form-label-price">付款人数：</span>
         <el-input
           v-model.number="form.taskGoodsList[item-1].payPeopleNum"
+          type="number"
           size="mini"
           :min="0"
           style="width: 140px"

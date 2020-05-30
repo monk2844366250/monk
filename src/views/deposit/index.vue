@@ -195,7 +195,8 @@ export default {
       var method = (options.Method || 'get').toLowerCase()
       var key = options.Key || ''
       var pathname = key.indexOf('/') === 0 ? key : '/' + key
-      const urlHeard = process.env.VUE_APP_BASE_API
+      // const urlHeard = process.env.VUE_APP_BASE_API
+      const urlHeard = 'https://web.dxer168.com/api/'
       var url = urlHeard + '/common/getCosToken'
       var xhr = new XMLHttpRequest()
       var data = {
