@@ -8,7 +8,28 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login','/register','/password'] // no redirect whitelist
+const whiteList = [
+  '/login',
+  '/register',
+  '/password',
+  '/taskactivity/seejdll',
+  '/taskactivity/seejdtb',
+  '/taskactivity/seejdys',
+  '/taskactivity/seepddll',
+  '/taskactivity/seesjjd',
+  '/taskactivity/seesjpdd',
+  '/taskactivity/seesjtb',
+  '/taskactivity/seesjtbwjt',
+  '/taskactivity/seetbcjbq',
+  '/taskactivity/seetbdb',
+  '/taskactivity/seetbll',
+  '/taskactivity/seetbtb',
+  '/taskactivity/seetbtk',
+  '/taskactivity/seetbys',
+  '/taskactivity/seetbzp',
+  '/taskactivity/seealbb',
+  '/taskactivity/seeorder'
+] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -26,10 +47,10 @@ router.beforeEach(async(to, from, next) => {
       // if is logged in, redirect to the home page
       next({ path: '/admin/college' })
       NProgress.done()
-    } else if(to.path === '/'){
+    } else if (to.path === '/') {
       next({ path: '/admin/college' })
       NProgress.done()
-    }else {
+    } else {
       const hasGetUserInfo = store.getters.name
       if (hasGetUserInfo) {
         next()

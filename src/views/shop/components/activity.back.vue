@@ -1217,7 +1217,7 @@
                     <div class="form-item">
                         <span class="form-required"></span>
                         <span class="form-label">商品详情文字：</span>
-                        <el-input v-model="input14" size="small" style="width: 350px" placeholder="最多20个字！">
+                        <el-input v-model="input14" size="small" style="width: 350px" placeholder="最多5个字！"  :maxlength="5">
                         </el-input>
                                 <el-popover
           placement="top"

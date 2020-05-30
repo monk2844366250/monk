@@ -464,7 +464,7 @@
     <div class="form-item">
       <span class="form-required" />
       <span class="form-label">商品详情文字：</span>
-      <el-input v-model="form.taskGoodsList[0].content" size="small" :maxlength="5" style="width: 350px" placeholder="最多20个字！" />
+      <el-input v-model="form.taskGoodsList[0].content" size="small" :maxlength="5" style="width: 350px" placeholder="最多5个字！" />
       <el-popover
         placement="top"
         width="200"
@@ -925,7 +925,7 @@
         <el-input
           v-model="form.orderRemarks"
           type="textarea"
-          maxlength="100"
+          maxlength="200"
           :autosize="{ minRows: 5, maxRows: 5}"
           placeholder="重要！如果对任务有特殊要求，请在这里备注清楚，用户接单后会看到，最多100字（任务备注只限商家要求，平台负责传达信息不会强制要求用户按照要求执行）"
         />

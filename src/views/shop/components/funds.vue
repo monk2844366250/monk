@@ -252,7 +252,7 @@ export default {
       for (var i = 0; i < this.list.length; i++) {
         if (this.list[i].moneyType === 1) {
           this.moneyTypedata = '收'
-        } else if(this.list[i].moneyType === 2) {
+        } else if (this.list[i].moneyType === 2) {
           this.moneyTypedata = '支'
         }
       }
@@ -281,37 +281,46 @@ export default {
       const res = /^\d+(\.\d{2})?$/g
       if (!res.test(this.form.money)) {
         this.$message({
-          message: '充值金额只保留两位小数',
+          message: '请输入最多包含两位小数的正确金额',
           type: 'error'
         })
       } else {
-        console.log('form', this.form)
-        addCommission(this.form).then(response => {
-          if (response.code === 0) {
-            this.$message({
-              message: '充值成功',
-              type: 'success'
-            })
-            setTimeout(function() {
-              window.location.reload()
-            }, 700)
-          } else {
-            this.$message({
+        if (this.balance >= this.form.money) {
+          console.log('form', this.form)
+          addCommission(this.form).then(response => {
+            if (response.code === 0) {
+              this.$message({
+                message: '充值成功',
+                type: 'success'
+              })
+              setTimeout(function() {
+                window.location.reload()
+              }, 700)
+            } else {
+              this.$message({
+                // message: response.msg,
+                message: response.msg,
+                type: 'warning'
+              })
+              setTimeout(function() {
+                window.location.reload()
+              }, 700)
+            }
+            this.dialogFormVisible = false
+            // this.init()
+            this.balance = this.$store.getters.balance
+            this.brokerageBalance = this.$store.getters.brokerageBalance
+            this.freezeBalance = this.$store.getters.freezeBalance
+            console.log('失败还是要拿取数据', this.balance, this.brokerageBalance, this.freezeBalance)
+          })
+        } else {
+          this.$router.push({ path: 'recharge' })
+          this.$message({
             // message: response.msg,
-              message: response.msg,
-              type: 'warning'
-            })
-            setTimeout(function() {
-              window.location.reload()
-            }, 700)
-          }
-          this.dialogFormVisible = false
-          // this.init()
-          this.balance = this.$store.getters.balance
-          this.brokerageBalance = this.$store.getters.brokerageBalance
-          this.freezeBalance = this.$store.getters.freezeBalance
-          console.log('失败还是要拿取数据', this.balance, this.brokerageBalance, this.freezeBalance)
-        })
+            message: '您的本金不足，请充值',
+            type: 'warning'
+          })
+        }
       }
 
       //   } else {

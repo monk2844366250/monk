@@ -233,7 +233,7 @@ export default {
         storeId: 0,
         storeName: '',
         taskId: 1,
-        orderId: '',
+        orderId: null,
         thirdOrderNo: '',
         weight: 0
       },
@@ -243,7 +243,7 @@ export default {
         courierState: null,
         storeName: '',
         taskId: '',
-        orderId: '',
+        orderId: null,
         thirdOrderNo: ''
       },
       pageNum: 1,

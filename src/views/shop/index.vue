@@ -293,7 +293,8 @@ export default {
         }
         this.$store.dispatch('delView', view).then(() => {
           if (this.isActive(view)) {
-            this.$router.push({ path: '/admin/shop/notice' })
+            // this.$router.push({ path: '/admin/shop/notice' })
+            this.$router.go(-1)
           }
         })
       }
@@ -339,6 +340,7 @@ export default {
     delView(index, item) {
       if (this.activeTab === item.key) {
         this.viewTab.splice(index, 1)
+        console.log('路由显示', this.viewTab)
         this.viewTab = this.viewTab.slice(-3)
         console.log('标签页', this.viewTab)
         const change = index - 1

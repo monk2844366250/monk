@@ -23,7 +23,7 @@
       </div>
       <el-row :gutter="20" class="head-title">
         <el-col :span="4">
-          <img style="width: 60px; height: 100%;" :src="logoUrl" fit="contain">
+          <img style="width: 120px; height: 100%;" :src="logoUrl" fit="contain">
         </el-col>
         <el-col v-if="expressFlag" :span="3">
           <router-link
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-const url = require('@/assets/web/logox.png')
+const url = require('@/assets/web/logo.png')
 import chat from '@/components/chat'
 
 export default {

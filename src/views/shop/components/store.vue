@@ -162,7 +162,7 @@
         <br>
         <el-form-item prop="dataNum">
           <span slot="label" class="form-label">接单间隔</span>
-          <el-input v-model="form.dataNum" autocomplete="off" type="number" size="small" style="width: 30%">
+          <el-input v-model="form.dataNum" autocomplete="off" type="number" size="small" style="width: 30%" min="30" max="60">
             <template slot="append">天</template>
           </el-input>
           <span>（最小30天，最大60天）</span>
@@ -357,14 +357,14 @@ export default {
     },
     // 店铺网址
     inputBlur(e) {
-      // if (e.target.value.indexOf('.taobao.com') === -1) {
-      //   console.log(e.target.value)
-      //   this.$message({
-      //     message: '商品链接不正确请重新输入',
-      //     type: 'warning'
-      //   })
-      //   return
-      // }
+      if (e.target.value.indexOf('.taobao.com') === -1) {
+        console.log(e.target.value)
+        this.$message({
+          message: '商品链接不正确请重新输入',
+          type: 'warning'
+        })
+        return
+      }
     },
     copy(id) {
       const clipboard = new Clipboard('.copy-' + id)
@@ -399,7 +399,7 @@ export default {
       // if (!patt1.test(this.form.storeName)) {
       //   this.form.storeName.replace(/\s+/g, '')
       // }
-      console.log('店铺数据', this.form)
+      console.log('店铺数据123', this.form)
       this.form.storeName = this.form.storeName.replace(/^\s*|\s*$/g, '')
       const dataList = {
         address: this.form.address,
@@ -416,26 +416,41 @@ export default {
         url: this.form.url
       }
       console.log('店铺数据', dataList)
-      addStore(dataList).then(response => {
-        if (response.code === 0) {
+      if (dataList.storeTypeId) {
+        if (dataList.dataNum < 30 || dataList.dataNum > 60) {
           this.$message({
-            message: '添加成功',
-            type: 'success'
-          })
-          this.dialogFormVisible = false
-          this.init()
-        } else if (response.code === 301) {
-          this.$message({
-            message: '店铺名称信息填写不正确',
+            message: '请输入正确的接单时间间隔',
             type: 'warning'
           })
         } else {
-          this.$message({
-            message: response.msg,
-            type: 'warning'
+          addStore(dataList).then(response => {
+            if (response.code === 0) {
+              this.$message({
+                message: '添加成功',
+                type: 'success'
+              })
+              this.dialogFormVisible = false
+              this.init()
+            } else if (response.code === 301) {
+              this.$message({
+                message: '店铺名称信息填写不正确',
+                type: 'warning'
+              })
+            } else {
+              this.$message({
+                message: response.msg,
+                type: 'warning'
+              })
+            }
           })
         }
-      })
+      } else {
+        this.$message({
+          message: '请依次输入，确保店铺类型等不为空',
+          type: 'warning'
+        })
+      }
+
       //   } else {
       //     console.log('error submit!!')
       //     return false

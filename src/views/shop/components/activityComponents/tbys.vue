@@ -988,7 +988,7 @@
         <el-input
           v-model="form.orderRemarks"
           type="textarea"
-          maxlength="100"
+          maxlength="200"
           :autosize="{ minRows: 5, maxRows: 5}"
           placeholder="重要！如果对任务有特殊要求，请在这里备注清楚，用户接单后会看到，最多100字（任务备注只限商家要求，平台负责传达信息不会强制要求用户按照要求执行）"
         />
@@ -1598,21 +1598,29 @@ export default {
       data.taskAdditionalIncrement = JSON.stringify(data.taskAdditionalIncrement)
       data.taskCommentList = JSON.stringify(data.taskCommentList)
       data.taskGoodsList = JSON.stringify(data.taskGoodsList)
+      console.log('实际成交价', data.taskGoodsList)
       data.taskReleaseTimeList = JSON.stringify(data.taskReleaseTimeList)
       this.form.storeId = this.store
       this.form.storeTypeId = this.storeType
       this.form.taskTypeId = this.taskType
 
-      create(data).then(response => {
-        if (response.code === 0) {
-          this.$parent.handlePrice(response.data)
-        } else {
-          this.$message({
-            message: response.msg,
-            type: 'warning'
-          })
-        }
-      })
+      if (this.form.appointedOperationTime) {
+        create(data).then(response => {
+          if (response.code === 0) {
+            this.$parent.handlePrice(response.data)
+          } else {
+            this.$message({
+              message: response.msg,
+              type: 'warning'
+            })
+          }
+        })
+      } else {
+        this.$message({
+          message: '预售时间未设置',
+          type: 'warning'
+        })
+      }
     },
     stitchingData(keyword, otherKey, num) {
       var data = []

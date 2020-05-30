@@ -48,6 +48,77 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/taskactivity/seejdll',
+    name: 'seejdll',
+    component: () => import('@/views/login/taskactivity/seejdll')
+  }, {
+    path: '/taskactivity/seejdtb',
+    name: 'seejdtb',
+    component: () => import('@/views/login/taskactivity/seejdtb')
+  }, {
+    path: '/taskactivity/seejdys',
+    name: 'seejdys',
+    component: () => import('@/views/login/taskactivity/seejdys')
+  },
+  {
+    path: '/taskactivity/seepddll',
+    name: 'seepddll',
+    component: () => import('@/views/login/taskactivity/seepddll')
+  }, {
+    path: '/taskactivity/seesjjd',
+    name: 'seesjjd',
+    component: () => import('@/views/login/taskactivity/seesjjd')
+  }, {
+    path: '/taskactivity/seesjpdd',
+    name: 'seesjpdd',
+    component: () => import('@/views/login/taskactivity/seesjpdd')
+  },
+  {
+    path: '/taskactivity/seesjtb',
+    name: 'seesjtb',
+    component: () => import('@/views/login/taskactivity/seesjtb')
+  }, {
+    path: '/taskactivity/seesjtbwjt',
+    name: 'seesjtbwjt',
+    component: () => import('@/views/login/taskactivity/seesjtbwjt')
+  }, {
+    path: '/taskactivity/seetbcjbq',
+    name: 'seetbcjbq',
+    component: () => import('@/views/login/taskactivity/seetbcjbq')
+  }, {
+    path: '/taskactivity/seetbdb',
+    name: 'seetbdb',
+    component: () => import('@/views/login/taskactivity/seetbdb')
+  }, {
+    path: '/taskactivity/seetbll',
+    name: 'seetbll',
+    component: () => import('@/views/login/taskactivity/seetbll')
+  }, {
+    path: '/taskactivity/seetbtb',
+    name: 'seetbtb',
+    component: () => import('@/views/login/taskactivity/seetbtb')
+  }, {
+    path: '/taskactivity/seetbtk',
+    name: 'seetbtk',
+    component: () => import('@/views/login/taskactivity/seetbtk')
+  }, {
+    path: '/taskactivity/seetbys',
+    name: 'seetbys',
+    component: () => import('@/views/login/taskactivity/seetbys')
+  }, {
+    path: '/taskactivity/seetbzp',
+    name: 'seetbzp',
+    component: () => import('@/views/login/taskactivity/seetbzp')
+  }, {
+    path: '/taskactivity/seealbb',
+    name: 'seealbb',
+    component: () => import('@/views/login/taskactivity/seealbb')
+  }, {
+    path: '/taskactivity/seeorder',
+    name: 'seeorder',
+    component: () => import('@/views/login/taskactivity/seeorder')
+  },
+  {
     path: '/admin',
     component: LayoutAdmin,
     redirect: '/admin/college',
