@@ -159,8 +159,13 @@
                   <span class="label">{{ items.userType === 1 ? '商家' : '平台' }}:</span>
                   <div class="flex1">
                     <div class="p">{{ items.content }}</div>
-                    <img v-if="items.imgUrl" :src="items.imgUrl" alt class="img" :preview-src-list="items.imgUrl" @click="toBigImg(items)">
+                    <!-- <img v-if="items.imgUrl" :src="items.imgUrl" alt class="img" :preview-src-list="items.imgUrl" @click="toBigImg(items)"> -->
                     <!-- <img src="@/assets/images/goodsImg.jpg" alt class="img"> -->
+                    <el-image
+                      style="width: 40px; height: 40px"
+                      :src="items.imgUrl"
+                      :preview-src-list="[items.imgUrl]"
+                    />
                   </div>
                 </div>
               </li>

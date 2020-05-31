@@ -13,61 +13,61 @@
     <div v-if="activeName=='gift'">
       <div class="order-page">
         <div class="search">
-        <div class="item">
-          <span class="lb">代发订单ID:</span>
-          <input class="ipt" type="text" v-model="queryList.gId" />
+          <div class="item">
+            <span class="lb">代发订单ID:</span>
+            <input v-model="queryList.gId" class="ipt" type="text">
+          </div>
+          <div class="item">
+            <span class="lb">状态：</span>
+            <el-select v-model="queryList.status" placeholder="状态" size="small">
+              <el-option
+                v-for="item in statusList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
+          <div class="item">
+            <span class="lb">代发类型：</span>
+            <el-select v-model="queryList.type" placeholder="代发类型" size="small">
+              <el-option
+                v-for="item in typeList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
         </div>
-        <div class="item">
-          <span class="lb">状态：</span>
-          <el-select v-model="queryList.status" placeholder="状态"  size="small" >
-            <el-option
-                    v-for="item in statusList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-          </el-select>
-        </div>
-        <div class="item">
-          <span class="lb">代发类型：</span>
-          <el-select v-model="queryList.type" placeholder="代发类型"  size="small" >
-            <el-option
-                    v-for="item in typeList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-          </el-select>
-        </div>
-      </div>
         <div class="search">
           <div class="item">
             <span class="lb">创建时间：</span>
             <el-date-picker
-                    value-format="yyyy-MM-dd"
-                    size="mini"
-                    style="width: 220px"
-                    v-model="timeRange"
-                    @change="timeChange"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-            </el-date-picker>
+              v-model="timeRange"
+              value-format="yyyy-MM-dd"
+              size="mini"
+              style="width: 220px"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="timeChange"
+            />
           </div>
           <div class="item">
             <span class="lb">发货时间：</span>
             <el-date-picker
-                    value-format="yyyy-MM-dd"
-                    size="mini"
-                    style="width: 220px"
-                    v-model="timeRange2"
-                    @change="timeChange2"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
-            </el-date-picker>
+              v-model="timeRange2"
+              value-format="yyyy-MM-dd"
+              size="mini"
+              style="width: 220px"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              @change="timeChange2"
+            />
           </div>
           <button class="btn" @click="search">搜索</button>
           <button class="btn" @click="handleExportYwGiftOrderDetaillList">导出</button>
@@ -90,16 +90,16 @@
             <td>{{ item.orderNo }}</td>
             <td>
               <el-image
-                      v-if="item.type===1"
-                      style="width: 20px; height: 20px"
-                      :src="item.giftImg"
-                      :preview-src-list="[item.giftImg]">
-              </el-image>
+                v-if="item.type===1"
+                style="width: 20px; height: 20px"
+                :src="item.giftImg"
+                :preview-src-list="[item.giftImg]"
+              />
               <span v-if="item.type===2">无</span>
             </td>
             <td>{{ item.courierCompanyName?item.courierCompanyName:'无' }}</td>
             <td>{{ item.courierNo }}</td>
-            <td>{{ item.createTime}}</td>
+            <td>{{ item.createTime }}</td>
             <td>{{ item.startTime1 }}</td>
           </tr>
 
@@ -109,40 +109,39 @@
           <a class="prev" @click="handleChangePage(false)">上一页</a>
           <span class="cur">{{ queryList.pageNum }}&nbsp;/&nbsp;{{ total?total:1 }}</span>
           <a class="next" @click="handleChangePage(true)">下一页</a>
-          <input class="ipt" type="text" v-model="pageIn">
+          <input v-model="pageIn" class="ipt" type="text">
           <button class="btn" @click="handlePageIn">跳转</button>
         </div>
       </div>
     </div>
 
-
     <div v-if="activeName=='leary'">
       <div class="search">
         <div class="item">
           <span class="lb">任务ID:</span>
-          <input class="ipt" type="text" v-model="emptyQueryList.taskId"/>
+          <input v-model="emptyQueryList.taskId" class="ipt" type="text">
         </div>
         <div class="item">
           <span class="lb">订单ID：</span>
-          <input class="ipt" type="text" v-model="emptyQueryList.orderId" />
+          <input v-model="emptyQueryList.orderId" class="ipt" type="text">
         </div>
         <div class="item">
           <span class="lb">店铺名称：</span>
-          <input class="ipt" type="text" v-model="emptyQueryList.storeName" />
+          <input v-model="emptyQueryList.storeName" class="ipt" type="text">
         </div>
         <div class="item">
           <span class="lb">订单编号：</span>
-          <input class="ipt" type="text" v-model="emptyQueryList.orderNo" />
+          <input v-model="emptyQueryList.orderNo" class="ipt" type="text">
         </div>
         <div class="item">
           <span class="lb">快递状态：</span>
-          <el-select v-model="emptyQueryList.status" placeholder="快递状态"  size="small" >
+          <el-select v-model="emptyQueryList.status" placeholder="快递状态" size="small">
             <el-option
-                    v-for="item in statusList"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
+              v-for="item in statusList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
           </el-select>
         </div>
         <button class="btn" @click="search()">搜索</button>
@@ -155,7 +154,7 @@
             <div class="checkbox">
               <input type="checkbox" class="chk-ipt">
               <span class="chk-out" style="margin-right:0">
-                <span class="chk-in"></span>
+                <span class="chk-in" />
               </span>
             </div>
             <div class="one"> 任务ID：1103546 </div>
@@ -191,8 +190,8 @@
             <div class="border flexjsp">
               <div class="one"><span class="lb">商品名称：</span><span class="sp">百雀羚气韵化妆品水乳套装 </span></div>
               <div class="one">
-                <span class="lb">快递：</span><select name="" id=""><option>  韵达快递</option></select>
-                <span class="lb">重 </span><select name="" id=""><option>1.2</option></select> kg
+                <span class="lb">快递：</span><select id="" name=""><option>  韵达快递</option></select>
+                <span class="lb">重 </span><select id="" name=""><option>1.2</option></select> kg
               </div>
             </div>
             <div class="border bdbtn">获取单号</div>
@@ -204,7 +203,7 @@
             <div class="checkbox">
               <input type="checkbox" class="chk-ipt">
               <span class="chk-out" style="margin-right:0">
-                <span class="chk-in"></span>
+                <span class="chk-in" />
               </span>
             </div>
             <div class="one"> 任务ID：1103546 </div>
@@ -240,8 +239,8 @@
             <div class="border flexjsp">
               <div class="one"><span class="lb">商品名称：</span><span class="sp">百雀羚气韵化妆品水乳套装 </span></div>
               <div class="one">
-                <span class="lb">快递：</span><select name="" id=""><option>  韵达快递</option></select>
-                <span class="lb">重 </span><select name="" id=""><option>1.2</option></select> kg
+                <span class="lb">快递：</span><select id="" name=""><option>  韵达快递</option></select>
+                <span class="lb">重 </span><select id="" name=""><option>1.2</option></select> kg
               </div>
             </div>
             <div class="border bdbtn">获取单号</div>
@@ -253,7 +252,7 @@
             <div class="checkbox">
               <input type="checkbox" class="chk-ipt">
               <span class="chk-out" style="margin-right:0">
-                <span class="chk-in"></span>
+                <span class="chk-in" />
               </span>
             </div>
             <div class="one"> 任务ID：1103546 </div>
@@ -289,8 +288,8 @@
             <div class="border flexjsp">
               <div class="one"><span class="lb">商品名称：</span><span class="sp">百雀羚气韵化妆品水乳套装 </span></div>
               <div class="one">
-                <span class="lb">快递：</span><select name="" id=""><option>  韵达快递</option></select>
-                <span class="lb">重 </span><select name="" id=""><option>1.2</option></select> kg
+                <span class="lb">快递：</span><select id="" name=""><option>  韵达快递</option></select>
+                <span class="lb">重 </span><select id="" name=""><option>1.2</option></select> kg
               </div>
             </div>
             <div class="border bdbtn">获取单号</div>
@@ -303,7 +302,7 @@
         <a class="prev" @click="handleChangePage2(false)">上一页</a>
         <span class="cur">{{ emptyQueryList.pageNum }}&nbsp;/&nbsp;{{ emptyTotal?emptyTotal:1 }}</span>
         <a class="next" @click="handleChangePage2(true)">下一页</a>
-        <input class="ipt" type="text" v-model="emptyPageIn">
+        <input v-model="emptyPageIn" class="ipt" type="text">
         <button class="btn" @click="handlePageIn2">跳转</button>
       </div>
     </div>
@@ -311,80 +310,79 @@
 </template>
 
 <script>
-  import {selectYwGiftOrderDetaillList,exportYwGiftOrderDetaillList,selectYwOrderCourierList} from '@/api/shop'
-  import {downloadFile} from '@/utils'
+import { selectYwGiftOrderDetaillList, exportYwGiftOrderDetaillList, selectYwOrderCourierList } from '@/api/shop'
+import { downloadFile } from '@/utils'
 export default {
-  name: "single",
+  name: 'Single',
   data() {
     return {
-      activeName: "gift",
+      activeName: 'gift',
       statusList: [{
         value: 0,
         label: '全部'
-      },{
+      }, {
         value: 1,
         label: '已发货'
-      },{
+      }, {
         value: 2,
         label: '未发货'
       }],
       typeList: [{
         value: 0,
         label: '全部'
-      },{
+      }, {
         value: 1,
         label: '礼品代发'
-      },{
+      }, {
         value: 2,
         label: '空包代发'
       }],
-      queryList:{
-        endTime:null,
-        endTime1:null,
-        startTime:null,
-        startTime1:null,
-        gId:null,
-        pageNum:1,
-        pageSize:10,
-        status:0,
-        type:0,
+      queryList: {
+        endTime: null,
+        endTime1: null,
+        startTime: null,
+        startTime1: null,
+        gId: null,
+        pageNum: 1,
+        pageSize: 10,
+        status: 0,
+        type: 0
       },
-      list:[],
-      total:1,
-      pageIn:null,
-      timeRange:[],
-      timeRange2:[],
+      list: [],
+      total: 1,
+      pageIn: null,
+      timeRange: [],
+      timeRange2: [],
 
-      emptyQueryList:{
-        orderId:null,
-        orderNo:null,
-        storeName:null,
-        taskId:null,
-        pageNum:1,
-        pageSize:10,
-        status:0,
+      emptyQueryList: {
+        orderId: null,
+        orderNo: null,
+        storeName: null,
+        taskId: null,
+        pageNum: 1,
+        pageSize: 10,
+        status: 0
       },
-      emptyList:[],
-      emptyTotal:1,
-      emptyPageIn:null,
-    };
+      emptyList: [],
+      emptyTotal: 1,
+      emptyPageIn: null
+    }
   },
-  created(){
-    this.init();
-    this.emptyInit();
+  created() {
+    this.init()
+    this.emptyInit()
   },
   methods: {
-    init(){
-      selectYwGiftOrderDetaillList(this.queryList).then(response=>{
-        this.list = response.data.rows;
-        this.total = Math.ceil(response.data.total/this.queryList.pageSize);
+    init() {
+      selectYwGiftOrderDetaillList(this.queryList).then(response => {
+        this.list = response.data.rows
+        this.total = Math.ceil(response.data.total / this.queryList.pageSize)
       })
-
     },
-    emptyInit(){
-      selectYwOrderCourierList(this.emptyQueryList).then(response=>{
-        this.emptyList = response.data.rows;
-        this.emptyTotal = Math.ceil(response.data.total/this.emptyQueryList.pageSize);
+    emptyInit() {
+      selectYwOrderCourierList(this.emptyQueryList).then(response => {
+        this.emptyList = response.data.rows
+        this.emptyTotal = Math.ceil(response.data.total / this.emptyQueryList.pageSize)
       })
     },
     timeChange(val) {
@@ -399,25 +397,23 @@ export default {
         this.queryList.endTime1 = null
       }
     },
-    handleChangePage(type){
-      if (type){
-        if (this.queryList.pageNum < this.total){
+    handleChangePage(type) {
+      if (type) {
+        if (this.queryList.pageNum < this.total) {
           this.queryList.pageNum++
           this.init()
         }
-
-      }else{
-        if (this.queryList.pageNum >1){
+      } else {
+        if (this.queryList.pageNum > 1) {
           this.queryList.pageNum--
           this.init()
         }
       }
-
     },
-    handlePageIn(){
-      if (this.pageIn<=this.total && this.pageIn>0) {
+    handlePageIn() {
+      if (this.pageIn <= this.total && this.pageIn > 0) {
         this.queryList.pageNum = this.pageIn
-        this.init();
+        this.init()
       }
     },
     search() {
@@ -429,15 +425,15 @@ export default {
         this.queryList.startTime1 = this.timeRange[0]
         this.queryList.endTime1 = this.timeRange[1]
       }
-      this.init();
+      this.init()
     },
-    handleExportYwGiftOrderDetaillList(){
+    handleExportYwGiftOrderDetaillList() {
       var data = Object.assign({}, this.queryList)
-      delete data.pageNum;
-      delete data.pageSize;
-      exportYwGiftOrderDetaillList(this.queryList).then(response=>{
+      delete data.pageNum
+      delete data.pageSize
+      exportYwGiftOrderDetaillList(this.queryList).then(response => {
         if (response.code === 0) {
-          downloadFile(response,'daifa_dingdan')
+          downloadFile(response, 'daifa_dingdan')
         } else {
           this.$message({
             message: response.msg,
@@ -448,35 +444,35 @@ export default {
         }
       })
     },
-    handleChangePage2(type){
-      if (type){
-        if (this.emptyList.pageNum < this.emptyTotal){
+    // 翻页
+    handleChangePage2(type) {
+      if (type) {
+        if (this.emptyList.pageNum < this.emptyTotal) {
           this.emptyList.pageNum++
           this.emptyInit()
         }
-
-      }else{
-        if (this.emptyList.pageNum >1){
+      } else {
+        if (this.emptyList.pageNum > 1) {
           this.emptyList.pageNum--
           this.emptyInit()
         }
       }
-
     },
-    handlePageIn2(){
-      if (this.emptyPageIn<=this.emptyTotal && this.emptyPageIn>0) {
+    // 跳转
+    handlePageIn2() {
+      if (this.emptyPageIn <= this.emptyTotal && this.emptyPageIn > 0) {
         this.emptyList.pageNum = this.emptyPageIn
-        this.emptyInit();
+        this.emptyInit()
       }
     },
     search2() {
-      this.emptyInit();
+      this.emptyInit()
     },
     handleMenuChange(val) {
-      this.activeName = val;
+      this.activeName = val
     }
   }
-};
+}
 </script>
 
 <style scoped>

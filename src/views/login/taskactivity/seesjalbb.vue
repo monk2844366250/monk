@@ -1057,7 +1057,7 @@ import { uploadImage } from '@/utils'
 // import qs from 'qs'
 
 export default {
-  name: 'Seealbb',
+  name: 'Seesjalbb',
   components: { VDistpicker },
   data() {
     return {

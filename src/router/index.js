@@ -110,9 +110,9 @@ export const constantRoutes = [
     name: 'seetbzp',
     component: () => import('@/views/login/taskactivity/seetbzp')
   }, {
-    path: '/taskactivity/seealbb',
-    name: 'seealbb',
-    component: () => import('@/views/login/taskactivity/seealbb')
+    path: '/taskactivity/seesjalbb',
+    name: 'seesjalbb',
+    component: () => import('@/views/login/taskactivity/seesjalbb')
   }, {
     path: '/taskactivity/seeorder',
     name: 'seeorder',

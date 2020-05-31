@@ -27,7 +27,7 @@ const whiteList = [
   '/taskactivity/seetbtk',
   '/taskactivity/seetbys',
   '/taskactivity/seetbzp',
-  '/taskactivity/seealbb',
+  '/taskactivity/seesjalbb',
   '/taskactivity/seeorder'
 ] // no redirect whitelist
 

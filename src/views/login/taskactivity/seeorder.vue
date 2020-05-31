@@ -1,5 +1,5 @@
 <template>
-  <div style="position:relative; width:1000px;margin:20px auto 0">
+  <div style="position:relative;width:1000px;margin:20px auto 0;">
     <div style="margin-bottom: 10px">
       <span style="font-weight: bold">订单信息</span>
       <!-- <el-button size="mini" class="btn-theme" style="float: right;padding: 3px 12px;" @click="dialogFormVisible=true">申诉</el-button>
