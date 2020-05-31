@@ -689,7 +689,7 @@
       <span class="form-required" />
       <span class="form-label">{{ imgItem.name }}：</span>
       <el-checkbox-group
-        v-if="imgItem.name === '搜索货比'"
+        v-if="imgItem.name === '搜索货比' || imgItem.name === '浏览商品'"
         v-model="screenshotDetails"
         style="display: flex;"
         @change="handleCheckBox"
@@ -700,7 +700,6 @@
           style="width: 135px"
         >
           <el-checkbox :label="childImgItem.id">
-            <!--<el-button size="mini" class="checkbox-button-width">{{ childImgItem.name}}</el-button>-->
             <div
               class="checkbox-button-width"
               style="border: 1px solid #DCDFE6;padding: 5px 7px;width: 105px;height:28px;text-align: center"
@@ -708,40 +707,9 @@
               {{ childImgItem.name }}
             </div>
           </el-checkbox>
-          <!-- <el-checkbox :label="childImgItem.id">
-            <div
-              class="checkbox-button-width"
-              style="border: 1px solid #DCDFE6;padding: 5px 7px;width: 105px;height:28px;text-align: center"
-            >
-              {{ childImgItem.name }}
-            </div>
-          </el-checkbox> -->
-
           <span v-if="childImgItem.amount>0" class="checkbox-tip">+{{ childImgItem.amount }}金币/单</span>
         </div>
       </el-checkbox-group>
-      <!-- <el-checkbox-group
-        v-if="imgItem.name === '浏览商品'"
-        v-model="screenshotDetaildata"
-        style="display: flex;"
-        @change="handleCheckData"
-      >
-        <div
-          v-for="childImgItem in imgItem.taskScreenshotCategoryDetailList"
-          class="checkbox-mr"
-          style="width: 135px"
-        >
-          <el-checkbox :label="childImgItem.id">
-            <div
-              class="checkbox-button-width"
-              style="border: 1px solid #DCDFE6;padding: 5px 7px;width: 105px;height:28px;text-align: center"
-            >
-              {{ childImgItem.name }}
-            </div>
-          </el-checkbox>
-          <span v-if="childImgItem.amount>0" class="checkbox-tip">+{{ childImgItem.amount }}金币/单</span>
-        </div>
-      </el-checkbox-group> -->
       <el-checkbox-group v-else v-model="form.screenshotDetailIds" style="display: flex;">
         <div
           v-for="(childImgItem, index) in imgItem.taskScreenshotCategoryDetailList"
@@ -1098,6 +1066,9 @@ export default {
       inputAll: 0, // 总单数
       screenshotDetails: [], // 存放搜索货比的值
       screenshotDetaildata: [], // 存放浏览商品的值
+      screenshotDetaildatas: [], // 存放收藏加购的值
+      arrMaxData: [],
+      arrMinData: [],
       form: {
         taskGoodsList: [{
           name: null,
@@ -1605,43 +1576,11 @@ export default {
       this.form.taskTypeId = this.taskType
       var data = JSON.parse(JSON.stringify(this.form))
       data.orderNum = this.orderAll
-      if (data.screenshotDetailIds.length > 0) {
-        if (this.screenshotDetails.length !== 0) {
-        // 进行货比的判断，输入进对比值
-          var numPass = this.screenshotDetails[0]
-          var arrList = []
-          if (numPass === 1) {
-            arrList = 1
-          } else if (numPass === 2) {
-            arrList = 1 + ',' + 2
-          } else if (numPass === 3) {
-            arrList = 1 + ',' + 2 + ',' + 3
-          } else if (numPass === 4) {
-            arrList = 1 + ',' + 2 + ',' + 3 + ',' + 4
-          } else {
-            arrList = ''
-          }
-          data.screenshotDetailIds.splice(0, 0, arrList)
-        }
-        // if (this.screenshotDetaildata.length !== 0) {
-        // // 进行货比的判断，输入进对比值
-        //   var dataPass = this.screenshotDetaildata[0]
-        //   var dataList = []
-        //   if (dataPass === 5) {
-        //     dataList = 5
-        //   } else if (dataPass === 6) {
-        //     dataList = 5 + ',' + 6
-        //   } else if (dataPass === 7) {
-        //     dataList = 5 + ',' + 6 + ',' + 7
-        //   } else {
-        //     dataList = ''
-        //   }
-        //   data.screenshotDetailIds.splice(0, 0, dataList)
-        // }
-        data.screenshotDetailIds = data.screenshotDetailIds.join(',')
-      } else {
-        data.screenshotDetailIds = null
-      }
+
+      data.screenshotDetailIds.splice(0, 0, this.arrMinData)
+      data.screenshotDetailIds.splice(0, 0, this.arrMaxData)
+      data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+
       if (data.taskAdditionalIncrement.goodsCategory.length > 0) {
         data.taskAdditionalIncrement.goodsCategory = data.taskAdditionalIncrement.goodsCategory.join(',')
       }
@@ -1747,20 +1686,56 @@ export default {
       //     return
       // }
     },
+    // 搜索货比单选
     handleCheckBox(val) {
+      this.maxToMin(val, 4)
+    },
+    maxToMin(arr, num) {
+      var arrMin = []
+      var arrMax = []
+      var max = null
+      var min = null
+      for (var i = 0; i < arr.length; i++) {
+        if (num >= arr[i]) {
+          arrMin.push(arr[i])
+        } else if (num < arr[i]) {
+          arrMax.push(arr[i])
+        }
+      }
+      max = arrMax[arrMax.length - 1]
+      min = arrMin[arrMin.length - 1]
       this.screenshotDetails = []
+      this.screenshotDetails = [max, min]
+      if (min === 1) {
+        arrMin = 1
+      } else if (min === 2) {
+        arrMin = 1 + ',' + 2
+      } else if (min === 3) {
+        arrMin = 1 + ',' + 2 + ',' + 3
+      } else if (min === 4) {
+        arrMin = 1 + ',' + 2 + ',' + 3 + ',' + 4
+      } else {
+        arrMin = ''
+      }
+      if (max === 5) {
+        arrMax = 5
+      } else if (max === 6) {
+        arrMax = 5 + ',' + 6
+      } else if (max === 7) {
+        arrMax = 5 + ',' + 6 + ',' + 7
+      } else {
+        arrMax = ''
+      }
+      this.arrMaxData = arrMax
+      this.arrMinData = arrMin
+    },
+    handleCheckData(val) {
+      this.screenshotDetaildata = []
       if (val.length >= 1) {
-        this.screenshotDetails[0] = val[val.length - 1]
-        this.form.screenshotDetailIds.splice(0, 0, this.screenshotDetails)
+        this.screenshotDetaildata[0] = val[val.length - 1]
+        this.form.screenshotDetailIds.splice(0, 0, this.screenshotDetaildata)
       }
     },
-    // handleCheckData(val) {
-    //   this.screenshotDetaildata = []
-    //   if (val.length >= 1) {
-    //     this.screenshotDetaildata[0] = val[val.length - 1]
-    //     this.form.screenshotDetailIds.splice(0, 0, this.screenshotDetaildata)
-    //   }
-    // },
     handleChangeReleaseDate(val) {
       console.log(this.form.releaseDate)
       if (this.form.releaseDate === null || this.form.releaseDate === '') {

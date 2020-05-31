@@ -706,7 +706,7 @@
         <span class="form-required" />
         <span class="form-label">{{ imgItem.name }}：</span>
         <el-checkbox-group
-          v-if="imgItem.name === '搜索货比'"
+          v-if="imgItem.name === '搜索货比' || imgItem.name === '浏览商品'"
           v-model="screenshotDetails"
           style="display: flex;"
           @change="handleCheckBox"
@@ -1114,6 +1114,8 @@ export default {
       orderAll: 0,
       inputAll: 0, // 总单数
       screenshotDetails: [], // 存放搜索货比的值
+      arrMaxData: [],
+      arrMinData: [],
       form: {
         taskGoodsList: [{
           name: null,
@@ -1507,10 +1509,13 @@ export default {
               screenshotDetailIds = screenshotDetailIds.map(Number)
               screenshotDetailIds = screenshotDetailIds.sort(function(a, b) { return a - b })
               var screenshotDetailIdsData = this.group(screenshotDetailIds, 5)
+              var screensData = this.group(screenshotDetailIdsData[1], 8)
               this.screenshotDetails = screenshotDetailIdsData[0].map(Number)
+              var screensDatas = screensData[0].map(Number)
+              screensDatas = this.ArrayPrototypeMax(screensDatas)
               this.screenshotDetails = this.ArrayPrototypeMax(this.screenshotDetails)
-              this.screenshotDetails = [this.screenshotDetails]
-              this.form.screenshotDetailIds = screenshotDetailIdsData[1].map(Number)
+              this.screenshotDetails = [this.screenshotDetails, screensDatas]
+              this.form.screenshotDetailIds = screensData[1].map(Number)
             }
           }
 
@@ -1993,12 +1998,48 @@ export default {
       //     return
       // }
     },
+    // 搜索货比单选
     handleCheckBox(val) {
-      this.screenshotDetails = []
-      if (val.length >= 1) {
-        this.screenshotDetails[0] = val[val.length - 1]
-        this.form.screenshotDetailIds.splice(0, 0, this.screenshotDetails)
+      this.maxToMin(val, 4)
+    },
+    maxToMin(arr, num) {
+      var arrMin = []
+      var arrMax = []
+      var max = null
+      var min = null
+      for (var i = 0; i < arr.length; i++) {
+        if (num >= arr[i]) {
+          arrMin.push(arr[i])
+        } else if (num < arr[i]) {
+          arrMax.push(arr[i])
+        }
       }
+      max = arrMax[arrMax.length - 1]
+      min = arrMin[arrMin.length - 1]
+      this.screenshotDetails = []
+      this.screenshotDetails = [max, min]
+      if (min === 1) {
+        arrMin = 1
+      } else if (min === 2) {
+        arrMin = 1 + ',' + 2
+      } else if (min === 3) {
+        arrMin = 1 + ',' + 2 + ',' + 3
+      } else if (min === 4) {
+        arrMin = 1 + ',' + 2 + ',' + 3 + ',' + 4
+      } else {
+        arrMin = ''
+      }
+      if (max === 5) {
+        arrMax = 5
+      } else if (max === 6) {
+        arrMax = 5 + ',' + 6
+      } else if (max === 7) {
+        arrMax = 5 + ',' + 6 + ',' + 7
+      } else {
+        arrMax = ''
+      }
+      this.arrMaxData = arrMax
+      this.arrMinData = arrMin
     },
     handleChangeReleaseDate(val) {
       // console.log(this.form.releaseDate)
