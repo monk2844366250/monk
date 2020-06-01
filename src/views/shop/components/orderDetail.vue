@@ -35,17 +35,15 @@
         <td>{{ item.taskStep }}</td>
         <td>{{ item.operator }}</td>
         <td>{{ item.operationTime }}</td>
-        <td>
+        <td style="display:flex;justify-content:center;">
           {{ item.wordContent }}
-          <!-- <div v-if="item.imgContent.length > 0" style="display:inline-block;margin:0;padding:0;">
-            <img :src="childItem.imgUrl" @click="toBigImg(childItem.imgUrl)" :preview-src-list="childItem.imgUrl" style="display:inline-block;width: 30px; height: 20px;margin:0;padding:2px;">
-          </div> -->
-          <el-image
-            v-if="item.imgContent.length > 0"
-            style="width: 20px; height: 20px"
-            :src="item.imgContent"
-            :preview-src-list="[item.imgContent]"
-          />
+          <div v-for="childItem in item.imgContent" v-if="item.imgContent.length > 0">
+            <el-image
+              style="width: 20px; height: 20px"
+              :src="childItem.imgUrl"
+              :preview-src-list="[childItem.imgUrl]"
+            />
+          </div>
         </td>
       </tr>
 
@@ -226,22 +224,24 @@ export default {
       }]
     }
   },
-  //   computed{
-  //       reSetData: {
-  //       get() {
-  //         return this.$store.getters.reSetData
-  //       },
-  //       set(val) {
-  //         this.$store.commit('SET_RESETDATA', val)
-  //       }
-  //     },
-  //   },
+  computed: {
+    orderData: {
+      get() {
+        return this.$store.getters.orderData
+      },
+      set(val) {
+        this.$store.commit('SET_ORDERDATA', val)
+      }
+    }
+  },
   mounted() {
     this.init()
   },
   methods: {
     init() {
-      var goodsdatas = this.$route.query
+      // var goodsdatas = this.$route.query
+      var goodsdatas = {}
+      goodsdatas = this.$store.getters.orderData
       console.log('详情数据', goodsdatas)
       this.order = goodsdatas.data.order
       console.log('原水数据', this.order)

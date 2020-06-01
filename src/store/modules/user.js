@@ -11,6 +11,7 @@ const user = {
     brokerageBalance: '',
     freezeBalance: '',
     reSetData: '', // 存放重新发布数据
+    orderData: '', // 存放订单详情数据
     auxiliaryFlag: true,
     expressFlag: true
   },
@@ -19,6 +20,7 @@ const user = {
     // RESET_STATE: (state) => {
     //   Object.assign(state, getDefaultState())
     // },
+    // set_orderData是订单详情的存放数据
     SET_RESETDATA: (state, reSetData) => {
       state.reSetData = reSetData
     },
@@ -45,6 +47,9 @@ const user = {
     },
     SET_FREEZEBALANCE: (state, freezeBalance) => {
       state.freezeBalance = freezeBalance
+    },
+    SET_ORDERDATA: (state, orderData) => {
+      state.orderData = orderData
     },
   },
 

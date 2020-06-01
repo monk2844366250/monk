@@ -35,25 +35,26 @@
         <td>{{ item.taskStep }}</td>
         <td>{{ item.operator }}</td>
         <td>{{ item.operationTime }}</td>
-        <td>
+        <td style="display:flex;justify-content:center;">
           {{ item.wordContent }}
-          <div v-if="item.imgContent.length > 0" style="display:inline-block;margin:0;padding:0;">
-            <img :src="childItem.imgUrl" :preview-src-list="childItem.imgUrl" style="display:inline-block;width: 30px; height: 20px;margin:0;padding:2px;" @click="toBigImg(childItem.imgUrl)">
-            <!-- <a v-for="childItem in item.imgContent" :href="childItem.imgUrl" target="_blank">
-              <img :src="childItem.imgUrl" style="display:inline-block;width: 30px; height: 20px;margin:0;padding:2px;">
-            </a> -->
+          <div v-for="childItem in item.imgContent" v-if="item.imgContent.length > 0">
+            <el-image
+              style="width: 20px; height: 20px"
+              :src="childItem.imgUrl"
+              :preview-src-list="[childItem.imgUrl]"
+            />
           </div>
         </td>
       </tr>
 
     </table>
 
-    <div v-if="toBigTrue === true" style="width:100%;height:730px;background: rgba(0, 0, 0, .25); position:fixed;top:0;left:0;">
+    <!-- <div v-if="toBigTrue === true" style="width:100%;height:730px;background: rgba(0, 0, 0, .25); position:fixed;top:0;left:0;">
       <img :src="urlToImg" style="position:absolute;right:80px;top:40px;width:40px;" @click="imgTOFalse">
-      <!-- <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" style="width:500px;position:absolute;right:500px;top:100px;"> -->
+
       <img :src="toImg" style="width:500px;position:absolute;right:500px;top:100px;">
-    </div>
-    <el-dialog title="发起申诉" :visible.sync="dialogFormVisible" width="550px">
+    </div> -->
+    <!-- <el-dialog title="发起申诉" :visible.sync="dialogFormVisible" width="550px">
       <el-form :model="form">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -64,7 +65,6 @@
           </el-col>
           <el-col :span="12">
             <el-form-item>
-              <!-- 申诉原因 0-全部 1-资金问题 2-任务问题 3-操作问题 -->
               <span style="color: #97A8BE">申诉原因：</span>
               <el-select v-model="value2" placeholder="请选择" size="mini" style="width: 130px">
                 <el-option
@@ -105,15 +105,6 @@
             :http-request="uploadAddImage1"
             limit="2"
           >
-            <!-- <el-upload
-            list-type="picture"
-            class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :file-list="fileList"
-
-          > -->
             <el-button size="small" type="primary">点击上传</el-button>
           </el-upload>
         </el-form-item>
@@ -123,7 +114,7 @@
         <el-button size="mini" style="color: #6666FF" @click="dialogFormVisible = false">取消退出</el-button>
         <el-button class="btn-theme" size="mini" @click="dialogFormVisibleExp">确认提交</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 

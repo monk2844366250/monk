@@ -320,6 +320,16 @@ export default {
       pageIn: null
     }
   },
+  computed: {
+    orderData: {
+      get() {
+        return this.$store.getters.orderData
+      },
+      set(val) {
+        this.$store.commit('SET_ORDERDATA', val)
+      }
+    }
+  },
   created() {
     this.init()
   },
@@ -596,10 +606,12 @@ export default {
         getDetail(data).then(response => {
           if (response.code === 0) {
             console.log('页面数据', response.data)
-            const param = {
-              data: response.data
-            }
-            this.$router.push({ path: '/admin/shop/orderDetail/' + row.id, query: param })
+            this.$store.commit('SET_ORDERDATA', response.data)
+            // 更换路由传参为使用vuex来存储数据
+            // const param = {
+            //   data: response.data
+            // }
+            // this.$router.push({ path: '/admin/shop/orderDetail/' + row.id, query: param })
             this.dialogFormVisible = false
           } else {
             this.$message({
