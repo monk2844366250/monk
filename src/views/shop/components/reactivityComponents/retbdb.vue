@@ -1699,9 +1699,22 @@ export default {
       // var data = Object.assign({},this.form);
       var data = JSON.parse(JSON.stringify(this.form))
       data.orderNum = this.orderAll
-      data.screenshotDetailIds.splice(0, 0, this.arrMinData)
-      data.screenshotDetailIds.splice(0, 0, this.arrMaxData)
-      data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+      if (data.screenshotDetailIds.length > 0) {
+        if (this.arrMinData.length > 0) {
+          data.screenshotDetailIds.splice(0, 0, this.arrMinData)
+          data.screenshotDetailIds.splice(0, 0, this.arrMaxData)
+          data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+        } else if (this.arrMinData.length === 0 && this.screenshotDetails.length > 0) {
+          this.handleCheckBox(this.screenshotDetails)
+          data.screenshotDetailIds.splice(0, 0, this.arrMinData)
+          data.screenshotDetailIds.splice(0, 0, this.arrMaxData)
+          data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+        }
+
+        console.log(data.screenshotDetailIds)
+      } else {
+        data.screenshotDetailIds = null
+      }
       if (data.taskAdditionalIncrement.goodsCategory.length > 0) {
         data.taskAdditionalIncrement.goodsCategory = data.taskAdditionalIncrement.goodsCategory.join(',')
       }

@@ -233,7 +233,9 @@ export default {
       })
     },
     goToCollege() {
-      this.$router.push({ path: '/admin/college' })
+      this.$router.go(-1)
+      console.log('数据跳转', this.$router)
+      // this.$router.push({ path: '/admin/college' })
     }
   }
 }

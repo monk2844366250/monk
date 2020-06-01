@@ -530,7 +530,8 @@ export default {
           }
           this.$store.commit('SET_RESETDATA', param)
           if (item.taskTypeName === '淘宝预售任务') {
-            this.$router.push({ path: 'components/tasktbys/', query: param })
+            this.$router.replace({ path: 'components/tasktbys/', query: param })
+            // this.$router.push({ path: 'components/tasktbys/', query: param })
           } else if (item.taskTypeName === '淘宝浏览任务') {
             this.$router.push({ path: 'components/tasktbll/', query: param })
           } else if (item.taskTypeName === '手机淘宝任务') {

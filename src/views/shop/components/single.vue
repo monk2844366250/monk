@@ -144,12 +144,12 @@
             />
           </el-select>
         </div>
-        <button class="btn" @click="search()">搜索</button>
+        <button class="btn" @click="searchExpress()">搜索</button>
         <button class="btn">导出</button>
       </div>
       <div class="od-title">获取快递单号前务必核对订单编号、收货信息、于下单地址是否一致</div>
       <ul class="order-list">
-        <li class="item">
+        <!-- <li class="item">
           <div class="dt">
             <div class="checkbox">
               <input type="checkbox" class="chk-ipt">
@@ -157,47 +157,47 @@
                 <span class="chk-in" />
               </span>
             </div>
-            <div class="one"> 任务ID：1103546 </div>
-            <div class="one"> 订单ID：10243432 </div>
-            <div class="one"> 店铺：妮蔻旗舰店 </div>
-            <div class="one"> 订单编号：183529623024692184 </div>
+            <div class="one"> 任务ID：{{ emptyList.taskId }} </div>
+            <div class="one"> 订单ID：{{ emptyList.orderId }} </div>
+            <div class="one"> 店铺：{{ emptyList.storeName }} </div>
+            <div class="one"> 订单编号：{{ emptyList.orderNo }} </div>
             <div class="one"> 付款时间：2018-07-06 11:28:52 </div>
           </div>
           <div class="dd">
             <div class="border first">发货信息</div>
             <div class="border flex1">
-              <div class="one"><span class="lb">发货人：</span><span class="sp">张三 </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">12345678910</span></div>
-              <div class="one"><span class="lb">发货地址：</span><span class="sp">安徽省合肥市蜀山区百草街126号 </span></div>
+              <div class="one"><span class="lb">发货人：</span><span class="sp">{{ senderName }} </span></div>
+              <div class="one"><span class="lb">发货号码：</span><span class="sp">{{ senderPhone }}</span></div>
+              <div class="one"><span class="lb">发货地址：</span><span class="sp">{{ senderProvince }} {{ senderCity }} {{ senderArea }}{{ senderAddress }} </span></div>
             </div>
             <div class="border last">
-              <span class="lb">会员名：</span><span class="sp">会飞的鱼 </span>
+              <span class="lb">会员名：</span><span class="sp">{{ nickname }} </span>
             </div>
           </div>
           <div class="dd">
             <div class="border first">收货信息</div>
             <div class="border flex1">
-              <div class="one"><span class="lb">收货人：</span><span class="sp">李四 </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">12345678910</span></div>
-              <div class="one"><span class="lb">收货地址：</span><span class="sp">湖南省长沙市市望城区郭亮中路红建大厦1208 </span></div>
+              <div class="one"><span class="lb">收货人：</span><span class="sp">{{ addresseeName }} </span></div>
+              <div class="one"><span class="lb">发货号码：</span><span class="sp">{{ addresseePhone }}</span></div>
+              <div class="one"><span class="lb">收货地址：</span><span class="sp">{{ addresseeProvince }}{{ addresseeCity }}{{ addresseeArea }}{{ addresseeAddress }}</span></div>
             </div>
             <div class="border last">
-              <p class="main-txt">12345678910</p>
+              <p class="main-txt">{{ expressNum }}</p>
             </div>
           </div>
           <div class="dd">
             <div class="border first">快递信息</div>
             <div class="border flexjsp">
-              <div class="one"><span class="lb">商品名称：</span><span class="sp">百雀羚气韵化妆品水乳套装 </span></div>
+              <div class="one"><span class="lb">商品名称：</span><span class="sp">{{ goodsName }} </span></div>
               <div class="one">
-                <span class="lb">快递：</span><select id="" name=""><option>  韵达快递</option></select>
-                <span class="lb">重 </span><select id="" name=""><option>1.2</option></select> kg
+                <span class="lb">快递：</span><select id="" name=""><option>  {{ courierCompanyName }}</option></select>
+                <span class="lb">重 </span><select id="" name=""><option>{{ weight }}</option></select> kg
               </div>
             </div>
-            <div class="border bdbtn">获取单号</div>
-            <div class="border bdbtn">修改地址</div>
+            <div class="border bdbtn" @click="toGetCourierOrderNo(item)">获取单号</div>
+            <div class="border bdbtn" @click="toUpdateCourier(item)">修改地址</div>
           </div>
-        </li>
+        </li> -->
         <li class="item">
           <div class="dt">
             <div class="checkbox">
@@ -310,7 +310,14 @@
 </template>
 
 <script>
-import { selectYwGiftOrderDetaillList, exportYwGiftOrderDetaillList, selectYwOrderCourierList, selectYwCourierList } from '@/api/shop'
+import {
+  selectYwGiftOrderDetaillList,
+  exportYwGiftOrderDetaillList,
+  selectYwOrderCourierList,
+  updateCourier,
+  selectYwCourierList,
+  getCourierOrderNo
+} from '@/api/shop'
 import { downloadFile } from '@/utils'
 export default {
   name: 'Single',
@@ -382,6 +389,8 @@ export default {
     emptyInit() {
       selectYwOrderCourierList(this.emptyQueryList).then(response => {
         this.emptyList = response.data.rows
+        console.log('经典的空包代发', this.emptyList)
+        console.log('经典的空包代发', response.data.rows)
         this.emptyTotal = Math.ceil(response.data.total / this.emptyQueryList.pageSize)
       })
     },
@@ -416,34 +425,76 @@ export default {
         this.init()
       }
     },
-    // search() {
-    //   if (this.timeRange && this.timeRange.length === 2) {
-    //     this.queryList.startTime = this.timeRange[0]
-    //     this.queryList.endTime = this.timeRange[1]
-    //   }
-    //   if (this.timeRange2 && this.timeRange2.length === 2) {
-    //     this.queryList.startTime1 = this.timeRange[0]
-    //     this.queryList.endTime1 = this.timeRange[1]
-    //   }
-    //   this.init()
-    // },
+    search() {
+      if (this.timeRange && this.timeRange.length === 2) {
+        this.queryList.startTime = this.timeRange[0]
+        this.queryList.endTime = this.timeRange[1]
+      }
+      if (this.timeRange2 && this.timeRange2.length === 2) {
+        this.queryList.startTime1 = this.timeRange[0]
+        this.queryList.endTime1 = this.timeRange[1]
+      }
+      this.init()
+    },
     // 搜索
     searchExpress() {
       const searchButtom = {
-        beginAcceptTime: this.searchData.acceptTime[0],
-        endAcceptTime: this.searchData.acceptTime[1] + 1,
-        courierState: this.searchData.courierState,
-        storeName: this.searchData.storeName,
-        taskId: this.searchData.taskId,
-        orderId: this.searchData.orderId,
-        thirdOrderNo: this.searchData.thirdOrderNo,
-        pageNum: this.pageNum,
-        pageSize: this.pageSize
+        beginAcceptTime: this.emptyQueryList.acceptTime[0],
+        endAcceptTime: this.emptyQueryList.acceptTime[1] + 1,
+        courierState: this.emptyQueryList.courierState,
+        storeName: this.emptyQueryList.storeName,
+        taskId: this.emptyQueryList.taskId,
+        orderId: this.emptyQueryList.orderId,
+        thirdOrderNo: this.emptyQueryList.thirdOrderNo,
+        pageNum: this.emptyQueryList.pageNum,
+        pageSize: this.emptyQueryList.pageSize
       }
       selectYwCourierList(searchButtom).then(response => {
         if (response.code === 0) {
           console.log('数据', response.data)
           this.list = response.data.rows
+          this.$message({
+            message: '获取完成！',
+            type: 'success'
+          })
+        }
+      })
+    },
+    // 获取快递单号
+    toGetCourierOrderNo(item) {
+      const data = {
+        addresseeAddress: item.addresseeAddress,
+        addresseeArea: item.addresseeArea,
+        addresseeCity: item.addresseeCity,
+        addresseeName: item.addresseeName,
+        addresseePhone: item.addresseePhone,
+        addresseeProvince: item.addresseeProvince,
+        courierCompanyId: this.courierCompanyId,
+        goodsName: item.goodsName,
+        id: item.id,
+        senderAddress: item.senderAddress,
+        senderArea: item.senderArea,
+        senderCity: item.senderCity,
+        senderName: item.senderName,
+        senderPhone: item.senderPhone,
+        senderProvince: item.senderProvince,
+        thirdOrderNo: item.thirdOrderNo,
+        weight: item.weight
+      }
+      getCourierOrderNo(data).then(response => {
+        if (response.code === 0) {
+          this.expressNum = response.data.courierOrderNo
+          this.$message({
+            message: '获取完成！',
+            type: 'success'
+          })
+        }
+      })
+    },
+    // 修改快递信息
+    toUpdateCourier(item) {
+      updateCourier(item).then(response => {
+        if (response.code === 0) {
           this.$message({
             message: '获取完成！',
             type: 'success'

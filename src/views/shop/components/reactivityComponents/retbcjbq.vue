@@ -1593,12 +1593,13 @@ export default {
           screensDatas = this.ArrayPrototypeMax(screensDatas)
           this.screenshotDetails = this.ArrayPrototypeMax(this.screenshotDetails)
           this.screenshotDetails = [this.screenshotDetails, screensDatas]
+          console.log('第四部分截图数据', this.screenshotDetails)
           this.form.screenshotDetailIds = screensData[1].map(Number)
         }
       }
 
       // // 第五部分
-      console.log('第五部分类目数据', taskAdditionalIncrementData)
+      // console.log('第五部分类目数据', taskAdditionalIncrementData)
       // console.log('taskAdditionalIncrementData123123', taskAdditionalIncrementData.area)
       var areaData = taskAdditionalIncrementData.area
       this.form.taskAdditionalIncrement.toUp = taskAdditionalIncrementData.toUp
@@ -1877,10 +1878,29 @@ export default {
       this.form.taskAdditionalIncrement.minAge = ageArray[0]
       // var data = Object.assign({},this.form);
       var data = JSON.parse(JSON.stringify(this.form))
+      console.log('页面截图数据12', this.screenshotDetails)
+      console.log('页面截图数据', this.form.screenshotDetailIds)
+      console.log('页面截图数据12', this.arrMinData)
+      console.log('页面截图数据', this.arrMaxData)
       data.orderNum = this.orderAll
-      data.screenshotDetailIds.splice(0, 0, this.arrMinData)
-      data.screenshotDetailIds.splice(0, 0, this.arrMaxData)
-      data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+      if (data.screenshotDetailIds.length > 0) {
+        if (this.arrMinData.length > 0) {
+          data.screenshotDetailIds.splice(0, 0, this.arrMinData)
+          data.screenshotDetailIds.splice(0, 0, this.arrMaxData)
+          data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+        } else if (this.arrMinData.length === 0 && this.screenshotDetails.length > 0) {
+          this.handleCheckBox(this.screenshotDetails)
+          data.screenshotDetailIds.splice(0, 0, this.arrMinData)
+          data.screenshotDetailIds.splice(0, 0, this.arrMaxData)
+          data.screenshotDetailIds = data.screenshotDetailIds.join(',')
+        }
+
+        console.log(data.screenshotDetailIds)
+      } else {
+        data.screenshotDetailIds = null
+      }
+
+      console.log('截图ID数据', data.screenshotDetailIds)
       if (data.taskAdditionalIncrement.goodsCategory.length > 0) {
         data.taskAdditionalIncrement.goodsCategory = data.taskAdditionalIncrement.goodsCategory.join(',')
       }

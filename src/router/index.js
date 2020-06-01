@@ -125,6 +125,9 @@ export const constantRoutes = [
     children: [{
       path: 'college',
       name: 'college',
+      meta: {
+        keepAlive: true // 需要缓存的页面
+      },
       component: () => import('@/views/college/index')
     },
     {
