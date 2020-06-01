@@ -73,7 +73,7 @@
               @click.native="jump('/admin/shop/express')"
             >
               <svg-icon class="icon" icon-class="kuaidiguanli" />
-              快递管理
+              补单空包
             </router-link>
             <router-link
               v-if="auxiliaryFlag"

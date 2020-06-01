@@ -287,7 +287,7 @@ export default {
         // })
       })
     },
-    // 快递显示
+    // 所选快递显示
     blurValue(data) {
       this.courierCompanyId = data
     },
@@ -315,9 +315,28 @@ export default {
         }
       })
     },
-    // 快递单号
+    // 获取快递单号
     toGetCourierOrderNo(item) {
-      getCourierOrderNo(item).then(response => {
+      const data = {
+        addresseeAddress: item.addresseeAddress,
+        addresseeArea: item.addresseeArea,
+        addresseeCity: item.addresseeCity,
+        addresseeName: item.addresseeName,
+        addresseePhone: item.addresseePhone,
+        addresseeProvince: item.addresseeProvince,
+        courierCompanyId: this.courierCompanyId,
+        goodsName: item.goodsName,
+        id: item.id,
+        senderAddress: item.senderAddress,
+        senderArea: item.senderArea,
+        senderCity: item.senderCity,
+        senderName: item.senderName,
+        senderPhone: item.senderPhone,
+        senderProvince: item.senderProvince,
+        thirdOrderNo: item.thirdOrderNo,
+        weight: item.weight
+      }
+      getCourierOrderNo(data).then(response => {
         if (response.code === 0) {
           this.expressNum = response.data.courierOrderNo
           this.$message({

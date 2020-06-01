@@ -310,7 +310,7 @@
 </template>
 
 <script>
-import { selectYwGiftOrderDetaillList, exportYwGiftOrderDetaillList, selectYwOrderCourierList } from '@/api/shop'
+import { selectYwGiftOrderDetaillList, exportYwGiftOrderDetaillList, selectYwOrderCourierList, selectYwCourierList } from '@/api/shop'
 import { downloadFile } from '@/utils'
 export default {
   name: 'Single',
@@ -416,16 +416,40 @@ export default {
         this.init()
       }
     },
-    search() {
-      if (this.timeRange && this.timeRange.length === 2) {
-        this.queryList.startTime = this.timeRange[0]
-        this.queryList.endTime = this.timeRange[1]
+    // search() {
+    //   if (this.timeRange && this.timeRange.length === 2) {
+    //     this.queryList.startTime = this.timeRange[0]
+    //     this.queryList.endTime = this.timeRange[1]
+    //   }
+    //   if (this.timeRange2 && this.timeRange2.length === 2) {
+    //     this.queryList.startTime1 = this.timeRange[0]
+    //     this.queryList.endTime1 = this.timeRange[1]
+    //   }
+    //   this.init()
+    // },
+    // 搜索
+    searchExpress() {
+      const searchButtom = {
+        beginAcceptTime: this.searchData.acceptTime[0],
+        endAcceptTime: this.searchData.acceptTime[1] + 1,
+        courierState: this.searchData.courierState,
+        storeName: this.searchData.storeName,
+        taskId: this.searchData.taskId,
+        orderId: this.searchData.orderId,
+        thirdOrderNo: this.searchData.thirdOrderNo,
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
-      if (this.timeRange2 && this.timeRange2.length === 2) {
-        this.queryList.startTime1 = this.timeRange[0]
-        this.queryList.endTime1 = this.timeRange[1]
-      }
-      this.init()
+      selectYwCourierList(searchButtom).then(response => {
+        if (response.code === 0) {
+          console.log('数据', response.data)
+          this.list = response.data.rows
+          this.$message({
+            message: '获取完成！',
+            type: 'success'
+          })
+        }
+      })
     },
     handleExportYwGiftOrderDetaillList() {
       var data = Object.assign({}, this.queryList)

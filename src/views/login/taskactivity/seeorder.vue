@@ -244,11 +244,16 @@ export default {
     //   this.order = goodsdatas.data.order
     //   console.log('原水数据', this.order)
     //   this.operationStepList = goodsdatas.data.operationStepList
-      var arrList = window.location.href.split('taskTypeId=')
-      var dataList = arrList[1]
-      dataList = dataList.map(Number)
+      var arrList = []
+      var dataList = null
+      if (window.location.href.indexOf('taskTypeId=') !== -1) {
+        arrList = window.location.href.split('taskTypeId=')
+        dataList = arrList[1]
+        // dataList = dataList.map(Number)
+      }
+
       console.log(' 12312数据', dataList, arrList)
-      getDetail(dataList).then(response => {
+      getDetail({ id: dataList }).then(response => {
         if (response.code === 0) {
           console.log('数据', response.data)
           this.operationStepList = response.data.operationStepList

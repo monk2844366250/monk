@@ -1331,16 +1331,22 @@ export default {
       var arrStore = []
       var numStore = null
       var idData = null
-      var arrList = window.location.href.split('taskTypeId=')
-      if (arrList[0].indexOf('store') !== -1) {
-        arrStore = arrList[0].split('store=')
-        numStore = arrStore[1].split('&')
-        idData = arrList[1]
-      } else {
-        arrStore = arrList[1].split('store=')
-        idData = arrStore[0].split('&')
-        numStore = arrStore[1]
+      var idDatas = null
+      if (window.location.href.indexOf('taskTypeId=') !== -1) {
+        var arrList = window.location.href.split('taskTypeId=')
+        if (arrList[0].indexOf('store') !== -1) {
+          arrStore = arrList[0].split('store=')
+          numStore = arrStore[1].split('&')
+          idDatas = arrList[1]
+        } else {
+          arrStore = arrList[1].split('store=')
+          idDatas = arrStore[0].split('&')
+          numStore = arrStore[1]
+        }
       }
+      console.log('idData', idDatas)
+      console.log('idData', idData)
+      idData = idDatas[0]
       // var arrtest = arrList[1].split('taskTypeId=')
       console.log('type数据', arrList)
       goodsdat = this.$route.query

@@ -145,7 +145,7 @@
           <el-button type="text" :disabled="(row.status === 4 || row.status === 6)? false : true" @click="handleYes(row.id)">确认</el-button>
           <el-button type="text" :disabled="(row.status !== 1 && row.status !== 2)? false : true" @click="handleDetail(row)">详情</el-button>
           <el-button type="text" :disabled="(row.status === 4) ? false : true" @click="handleDialog(2,row.id)">改价</el-button>
-          <el-button type="text" @click="handleHr(row.id)">换人</el-button>
+          <el-button type="text" :disabled="(row.status === 3) ? false : true" @click="handleHr(row.id)">换人</el-button>
         </template>
 
       </el-table-column>

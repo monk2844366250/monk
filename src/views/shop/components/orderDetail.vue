@@ -41,6 +41,7 @@
             <img :src="childItem.imgUrl" @click="toBigImg(childItem.imgUrl)" :preview-src-list="childItem.imgUrl" style="display:inline-block;width: 30px; height: 20px;margin:0;padding:2px;">
           </div> -->
           <el-image
+            v-if="item.imgContent.length > 0"
             style="width: 20px; height: 20px"
             :src="item.imgContent"
             :preview-src-list="[item.imgContent]"

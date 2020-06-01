@@ -311,13 +311,13 @@ export function orderConfirmOrder(data) {
     params: data
   })
 }
-export function orderGetDetail(data) {
-  return request({
-    url: 'order/getDetail',
-    method: 'post',
-    params: data
-  })
-}
+// export function orderGetDetail(data) {
+//   return request({
+//     url: 'order/getDetail',
+//     method: 'post',
+//     params: data
+//   })
+// }
 export function orderSubstitution(data) {
   return request({
     url: 'order/substitution',
