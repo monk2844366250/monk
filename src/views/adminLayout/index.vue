@@ -57,7 +57,8 @@
           </router-link>
         </el-col>
         <el-col :span="3">
-          <div @click="handleXiaoLu">帮助中心</div>
+          <router-link :to="{ path:'/admin/helpcenter'}" :class="{'menu-active':(nowPath === '/admin/helpcenter')}">帮助中心
+          </router-link>
         </el-col>
       </el-row>
     </el-header>

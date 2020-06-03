@@ -243,9 +243,9 @@ export default {
       var goodsdatas = {}
       goodsdatas = this.$store.getters.orderData
       console.log('详情数据', goodsdatas)
-      this.order = goodsdatas.data.order
+      this.order = goodsdatas.order
       console.log('原水数据', this.order)
-      this.operationStepList = goodsdatas.data.operationStepList
+      this.operationStepList = goodsdatas.operationStepList
     },
     dialogFormVisibleExp() {
       console.log('asdas', this.fileList)

@@ -6,6 +6,7 @@ const getters = {
   username: state => state.user.username,
   balance: state => state.user.balance,
   reSetData: state => state.user.reSetData,
+  orderData: state => state.user.orderData,
   brokerageBalance: state => state.user.brokerageBalance,
   freezeBalance: state => state.user.freezeBalance,
   auxiliaryFlag: state => state.user.auxiliaryFlag,

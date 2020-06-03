@@ -1,5 +1,6 @@
 <template>
-  <div class="notice-page">
+  <div class="notice-page" style="width:1000px;margin:0 auto;">
+    <span v-if="list" style="margin:0 auto;">暂无数据</span>
     <ul class="notice-list">
       <li v-for="(item,index) in list" class="item">
         <a class="title" @click="handleDetail(item.id)">({{ ++index }}) {{ item.title }}</a>
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-import { noticeList, noticeDetail } from '@/api/shop'
+import { helpFindList, helpGet } from '@/api/helpcenter'
 // help/findList
 export default {
   name: 'Helpcenter',
@@ -38,7 +39,7 @@ export default {
 
   methods: {
     init() {
-      noticeList(this.query).then(response => {
+      helpFindList(this.query).then(response => {
         this.list = response.data.rows
         this.pagetotal = Math.ceil(response.data.total / this.query.pageSize)
       })

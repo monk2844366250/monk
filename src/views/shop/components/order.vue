@@ -612,6 +612,7 @@ export default {
             //   data: response.data
             // }
             // this.$router.push({ path: '/admin/shop/orderDetail/' + row.id, query: param })
+            this.$router.push({ path: '/admin/shop/orderDetail/' + row.id })
             this.dialogFormVisible = false
           } else {
             this.$message({
