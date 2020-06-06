@@ -305,6 +305,8 @@ export default {
     init() {
       selectYwGiftOrderDetaillList(this.queryList).then(response => {
         this.list = response.data.rows
+        console.log('代发单号数据', this.list)
+        console.log('代发单号数据123', response.data)
         this.total = Math.ceil(response.data.total / this.queryList.pageSize)
       })
       var data = { pageNum: this.emptyQueryList.pageNum, pageSize: this.emptyQueryList.pageSize }

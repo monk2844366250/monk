@@ -44,13 +44,14 @@
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
           >
-            <!-- <canvas id="myCanvas" style="width:100px;height:100px;"></canvas> -->
-            <img v-show="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" id="waterMark" class="avatar">
+            <canvas id="myCanvas" style="width:100px;height:100px;" />
+            <img v-show="form.taskGoodsList[item-1].img" id="waterMark" :src="form.taskGoodsList[item-1].img" class="avatar">
+
             <i v-if="!form.taskGoodsList[item-1].img" class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
           <i class="el-icon-circle-close avatar-uploader-remove" @click="removeMainImg(item)" />
         </div>
-<!-- <img v-if="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" style="width:500px;height:500px;"> -->
+        <img v-if="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" style="width:500px;height:500px;">
         <el-popover
           placement="top"
           width="200"
@@ -1408,15 +1409,15 @@ export default {
     },
     uploadImage1(e) {
       // this.$base.watermark(e.file, uploadImage(e))
-      // this.$base.watermark(e.file, res => {
-      //   // res及为加完水印的图片对象
-      //   // ...实际的上传方法
-      //   this.toImgCanvas = uploadImage(e)
-      //   // this.form.taskGoodsList[this.shopIndex].img = uploadImage(e)
-      // })
+      this.$base.watermark(e.file, res => {
+        // res及为加完水印的图片对象
+        // ...实际的上传方法
+        // this.toImgCanvas = uploadImage(e)
+        // this.form.taskGoodsList[this.shopIndex].img = uploadImage(e)
+      })
       this.toImgCanvas = uploadImage(e)
       this.form.taskGoodsList[this.shopIndex].img = this.toImgCanvas
-      console.log('图片问题', this.form.taskGoodsList[this.shopIndex].img)
+      // console.log('图片问题', this.form.taskGoodsList[this.shopIndex].img)
     },
     uploadImageShopChange(index, file) {
       this.shopIndex = index

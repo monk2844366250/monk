@@ -302,7 +302,7 @@ export default {
           register(data).then(response => {
             if (response.code === 0) {
               this.$message({
-                message: response.msg,
+                message: '恭喜注册成功',
                 type: 'success'
               })
               this.$router.push({ path: '/login' })
