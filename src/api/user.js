@@ -55,8 +55,6 @@ export function getCaptcha() {
   })
 }
 
-
-
 export function logout() {
   return request({
     url: 'business/loginOut',

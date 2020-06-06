@@ -25,25 +25,25 @@
         <el-col :span="4">
           <img style="width: 120px; height: 100%;" :src="logoUrl" fit="contain">
         </el-col>
-        <el-col v-if="expressFlag" :span="3">
+        <el-col v-if="(auxiliaryFlag === 1) ? ((expressFlag) ? true : false) : false" :span="3">
           <router-link
             :to="{ path:'/admin/college'}"
             :class="{'menu-active':(nowPath.indexOf('/admin/college') > -1 )}"
           >电商学院
           </router-link>
         </el-col>
-        <el-col :span="3">
+        <el-col v-if="(markingFlag === 1) ? true : false" :span="3">
           <router-link :to="{ path:'/admin/marking'}" :class="{'menu-active':(nowPath === '/admin/marking')}">商品打标
           </router-link>
         </el-col>
-        <el-col :span="3">
+        <el-col v-if="(trialFlag === 1) ? true : false" :span="3">
           <router-link :to="{ path:'/admin/audit'}" :class="{'menu-active':(nowPath === '/admin/audit')}">审号工具
           </router-link>
         </el-col>
-        <el-col v-if="expressFlag" :span="3">
+        <el-col v-if="(onlineMallFlag === 1) ? ((expressFlag) ? true : false) : false" :span="3">
           <div @click="handleXiaoLu">电商工具</div>
         </el-col>
-        <el-col v-if="expressFlag" :span="3">
+        <el-col v-if="(auxiliaryFlag === 1) ? ((expressFlag) ? true : false) : false" :span="3">
           <router-link :to="{ path:'/admin/resources'}" :class="{'menu-active':(nowPath === '/admin/resources')}">电商资源
           </router-link>
         </el-col>
@@ -75,6 +75,7 @@
 <script>
 const url = require('@/assets/web/logo.png')
 import chat from '@/components/chat'
+import { getInfo } from '@/api/user'
 
 export default {
   name: 'Admin',
@@ -87,7 +88,11 @@ export default {
       nowPath: '',
       banlance: null,
       username: null,
-      expressFlag: null
+      expressFlag: null,
+      markingFlag: null,
+      trialFlag: null,
+      onlineMallFlag: null,
+      auxiliaryFlag: null
     }
   },
   computed: {
@@ -114,7 +119,31 @@ export default {
     this.username = this.$store.getters.username
     this.expressFlag = this.$store.getters.expressFlag
   },
+  mounted() {
+    this.init()
+  },
   methods: {
+    init() {
+      var myCookie = document.cookie
+      var arr = myCookie.split('=')
+      for (var i = 0; i <= arr.length; i++) {
+        if (arr[i] === 'Admin-Token') {
+          var num = arr[i + 1]
+        }
+      }
+      var token = 'token=' + num
+      getInfo(token).then(response => {
+        this.markingFlag = response.data.markingFlag
+        this.trialFlag = response.data.trialFlag
+        this.onlineMallFlag = response.data.onlineMallFlag
+        this.auxiliaryFlag = response.data.auxiliaryFlag
+        // this.userDataId = 'ID:' + response.data.id
+        // this.imageUrl = response.data.avatar
+        // if (this.imageUrl === null) {
+        //   this.imageUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+        // }
+      })
+    },
     handleXiaoLu() {
       this.$message({
         message: '正在开发中，敬请期待！',

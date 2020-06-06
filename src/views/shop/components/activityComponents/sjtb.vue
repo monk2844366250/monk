@@ -38,19 +38,19 @@
             style="margin-right: 20px;background-color: #F2F2F2;"
             class="avatar-uploader"
             :before-upload="function(file) {
-              return uploadImageShopChange(item-1)
+              return uploadImageShopChange((item-1), file)
             }"
             :http-request="uploadImage1"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
           >
-            <!-- <img v-show="form.taskGoodsList[item-1].img" src="http://test-1252901182.cos.ap-guangzhou.myqcloud.com/images/b816b770-9d5c-11ea-ac21-e92105a8b75c.jpg" class="avatar"> -->
-            <img v-if="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" class="avatar">
+            <!-- <canvas id="myCanvas" style="width:100px;height:100px;"></canvas> -->
+            <img v-show="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" id="waterMark" class="avatar">
             <i v-if="!form.taskGoodsList[item-1].img" class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
           <i class="el-icon-circle-close avatar-uploader-remove" @click="removeMainImg(item)" />
         </div>
-
+<!-- <img v-if="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" style="width:500px;height:500px;"> -->
         <el-popover
           placement="top"
           width="200"
@@ -745,7 +745,7 @@
       <span class="form-required" />
       <span class="form-label" />
       <span style="color: #97A8BE;margin-right: 10px">每单加赏</span>
-      <el-input-number v-model="form.taskAdditionalIncrement.rewardAmount" size="mini" style="width: 100px" />
+      <el-input-number v-model="form.taskAdditionalIncrement.rewardAmount" size="mini" :min="0" style="width: 100px" />
       <span class="form-label" style="margin-left: 10px">金</span>
       <span style="font-size: 12px;color:#bcbcbc;margin-left: 10px"> (加赏佣金能调动用户的接单积极性)</span>
     </div>
@@ -1144,6 +1144,7 @@ export default {
       pjspIndex: 0,
       kList: [],
       cost: {},
+      toImgCanvas: null,
       childImgItem: {
         id: 0
       }
@@ -1406,11 +1407,20 @@ export default {
       this.$parent.handleNextOrPre(false)
     },
     uploadImage1(e) {
-      this.form.taskGoodsList[this.shopIndex].img = uploadImage(e)
+      // this.$base.watermark(e.file, uploadImage(e))
+      // this.$base.watermark(e.file, res => {
+      //   // res及为加完水印的图片对象
+      //   // ...实际的上传方法
+      //   this.toImgCanvas = uploadImage(e)
+      //   // this.form.taskGoodsList[this.shopIndex].img = uploadImage(e)
+      // })
+      this.toImgCanvas = uploadImage(e)
+      this.form.taskGoodsList[this.shopIndex].img = this.toImgCanvas
       console.log('图片问题', this.form.taskGoodsList[this.shopIndex].img)
     },
-    uploadImageShopChange(index) {
+    uploadImageShopChange(index, file) {
       this.shopIndex = index
+      console.log('什么数据', this.shopIndex, index, file)
     },
     uploadImageBz1(e) {
       this.form.remarkImgUrl1 = uploadImage(e)

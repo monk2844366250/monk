@@ -68,6 +68,7 @@
               订单管理
             </router-link>
             <router-link
+              v-if="(expressFlag === 1) ? true : false"
               :to="{ path:'/admin/shop/express'}"
               :class="['item',{'cur':nowPath.indexOf('/admin/shop/express') > -1}]"
               @click.native="jump('/admin/shop/express')"
@@ -75,26 +76,26 @@
               <svg-icon class="icon" icon-class="kuaidiguanli" />
               补单空包
             </router-link>
-            <router-link
-              v-if="auxiliaryFlag"
+            <!-- <router-link
+              v-if="(expressFlag === 1) ? ((auxiliaryFlag) ? true : false) : false"
               :to="{ path:'/admin/shop/parcel'}"
               :class="['item',{'cur':nowPath==='/admin/shop/parcel'}]"
               @click.native="jump('/admin/shop/parcel')"
             >
               <svg-icon class="icon" icon-class="kuaidi" />
               快递代发
-            </router-link>
-            <router-link
-              v-if="auxiliaryFlag"
+            </router-link> -->
+            <!-- <router-link
+              v-if="(expressFlag === 1) ? ((auxiliaryFlag) ? true : false) : false"
               :to="{ path:'/admin/shop/parcelMng'}"
               :class="['item',{'cur':nowPath==='/admin/shop/parcelMng'}]"
               @click.native="jump('/admin/shop/parcelMng')"
             >
               <svg-icon class="icon" icon-class="daifa" />
               代发管理
-            </router-link>
+            </router-link> -->
             <router-link
-              v-if="auxiliaryFlag"
+              v-if="(expressFlag === 1) ? ((auxiliaryFlag) ? true : false) : false"
               :to="{ path:'/admin/shop/single'}"
               :class="['item',{'cur':nowPath.indexOf('/admin/shop/single') > -1}]"
               @click.native="jump('/admin/shop/single')"
@@ -192,7 +193,8 @@ export default {
       viewTab: [],
       userDataId: '',
       userDataImg: '',
-      imageUrl: ''
+      imageUrl: '',
+      expressFlag: null
     }
   },
   computed: {
@@ -263,6 +265,7 @@ export default {
       getInfo(token).then(response => {
         this.userDataId = 'ID:' + response.data.id
         this.imageUrl = response.data.avatar
+        this.expressFlag = response.data.expressFlag
         if (this.imageUrl === null) {
           this.imageUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
         }

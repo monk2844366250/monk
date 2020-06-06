@@ -103,7 +103,7 @@
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :http-request="uploadAddImage1"
-            limit="2"
+            :limit="2"
           >
             <!-- <el-upload
             list-type="picture"

@@ -1408,20 +1408,22 @@ export default {
       var idDatas = null
       if (window.location.href.indexOf('taskTypeId=') !== -1) {
         var arrList = window.location.href.split('taskTypeId=')
+        console.log('type数据1', arrList)
         if (arrList[0].indexOf('store') !== -1) {
           arrStore = arrList[0].split('store=')
           numStore = arrStore[1].split('&')
-          idData = arrList[1]
+          idDatas = arrList[1]
         } else {
           arrStore = arrList[1].split('store=')
-          idData = arrStore[0].split('&')
+          idDatas = arrStore[0].split('&')
           numStore = arrStore[1]
+          console.log('type数据3', numStore, idDatas)
         }
       }
 
       idData = idDatas[0]
       // var arrtest = arrList[1].split('taskTypeId=')
-      console.log('type数据', arrList)
+      console.log('type数据4', arrList)
       goodsdat = this.$route.query
       this.id = goodsdat.id
       // 店铺ID设置需要传参

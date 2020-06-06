@@ -43,6 +43,7 @@ export default {
       getCustomer().then(response => {
         if (response.code === 0) {
           this.customer = response.data.wxImg
+          console.log('客服微信', response.data.wxImg)
         } else {
           this.$message({
             message: response.msg,

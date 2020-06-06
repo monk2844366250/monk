@@ -1,6 +1,7 @@
 module.exports = {
 
-  title: 'web',
+  title: '店小二',
+  // title: 'web',
 
   /**
    * @type {boolean} true | false

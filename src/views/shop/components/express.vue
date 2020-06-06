@@ -164,18 +164,25 @@
         <td colspan="2">
           所选快递：
           <el-select
-            v-model="item.courierCompanyName"
+            v-model="courierCompanyNames"
             size="mini"
             style="width:80px;display:inline-block;"
             @focus="toSelectYwCourierCompanyList(item.storeTypeId)"
+            @blur="blurValue()"
           >
             <el-option
               v-for="items in kdList"
               :key="items.id"
               :label="items.name"
               :value="items.id"
-              @blur="blurValue(items.id)"
             />
+            <!-- <el-option
+              v-for="items in kdList"
+              :key="items.id"
+              :label="items.name"
+              :value="items.id"
+              @click="blurValue(items.id)"
+            /> -->
           </el-select>
         </td>
       </tr>
@@ -211,6 +218,7 @@ export default {
         storeId: null
       },
       expressNum: null,
+      courierCompanyNames: '',
       rows: {
         acceptTime: '',
         addresseeAddress: '',
@@ -266,6 +274,7 @@ export default {
         console.log('页码shuju ', this.list)
       })
       var data = { pageNum: this.pageNum, pageSize: this.pageSize }
+      console.log('data', data)
       selectYwCourierList(data).then(response => {
         if (response.code === 0) {
           this.rows = response.data.rows
@@ -279,17 +288,25 @@ export default {
       var dataexp = {
         storeTypeId: data
       }
+      console.log('快递公司信息', dataexp)
       selectYwCourierCompanyList(dataexp).then(response => {
+        console.log('快递公司信息123', response.data)
         this.kdList = response.data
         // this.$message({
         //   message: '快递类型获取完成！',
         //   type: 'success'
         // })
       })
+      console.log('快递公司信息', this.courierCompanyName)
+      console.log('快递公司信息s', this.courierCompanyNames)
     },
     // 所选快递显示
-    blurValue(data) {
-      this.courierCompanyId = data
+    blurValue() {
+      // this.courierCompanyId = data
+      // console.log('所选快递公司', data)
+      console.log('快递公司信息', this.courierCompanyName)
+      console.log('快递公司信息s', this.courierCompanyNames)
+      console.log('所选快递公司', this.courierCompanyId)
     },
     // 搜索
     searchExpress() {
@@ -324,7 +341,7 @@ export default {
         addresseeName: item.addresseeName,
         addresseePhone: item.addresseePhone,
         addresseeProvince: item.addresseeProvince,
-        courierCompanyId: this.courierCompanyId,
+        courierCompanyId: this.courierCompanyNames,
         goodsName: item.goodsName,
         id: item.id,
         senderAddress: item.senderAddress,
@@ -336,8 +353,12 @@ export default {
         thirdOrderNo: item.thirdOrderNo,
         weight: item.weight
       }
+      console.log('获取快递公司信息', this.courierCompanyNames)
+      console.log('获取快递公司信息', this.courierCompanyId)
       getCourierOrderNo(data).then(response => {
+        console.log('data', data)
         if (response.code === 0) {
+          console.log('data', response.data)
           this.expressNum = response.data.courierOrderNo
           this.$message({
             message: '获取完成！',

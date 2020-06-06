@@ -129,6 +129,7 @@ const uuid = require('uuid')
 export function uploadImage(e) {
   var _self = this
   var file = e.file
+  console.log('e.file', e.file)
   var uuidNum = uuid.v1()
   var fileNames = file.name.split('.')
   var fileName = []
@@ -170,6 +171,10 @@ export function getAuthorizations(options, callback) {
     method: method,
     pathname: pathname
   }
+  console.log('method', method)
+  console.log('key', key)
+  console.log('pathname', pathname)
+  console.log('data', data)
   xhr.open('GET', url, false)
   xhr.setRequestHeader('content-type', 'application/json')
   xhr.onload = function(e) {

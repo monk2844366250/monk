@@ -1331,10 +1331,10 @@ export default {
         if (arrList[0].indexOf('store') !== -1) {
           arrStore = arrList[0].split('store=')
           numStore = arrStore[1].split('&')
-          idData = arrList[1]
+          idDatas = arrList[1]
         } else {
           arrStore = arrList[1].split('store=')
-          idData = arrStore[0].split('&')
+          idDatas = arrStore[0].split('&')
           numStore = arrStore[1]
         }
       }
@@ -1350,7 +1350,7 @@ export default {
       // 可以固定数据
       this.storeType = 4
       this.taskType = 15
-      this.storeTypeName = '阿里巴巴'
+      this.storeTypeName = '手机阿里巴巴'
 
       this.form.storeId = this.store
       this.form.storeTypeId = this.storeType

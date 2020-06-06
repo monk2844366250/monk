@@ -12,8 +12,15 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-import md5 from 'js-md5';
-Vue.prototype.$md5 = md5;
+import watermark from '@/assets/js/watermark.js'
+Vue.prototype.$watermark = watermark
+
+import base from '@/assets/js/base.js'
+Vue.prototype.$base = base
+
+// 添加水印
+import md5 from 'js-md5'
+Vue.prototype.$md5 = md5
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

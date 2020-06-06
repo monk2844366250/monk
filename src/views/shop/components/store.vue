@@ -357,7 +357,7 @@ export default {
     },
     // 店铺网址
     inputBlur(e) {
-      if (e.target.value.indexOf('.taobao.com') === -1) {
+      if (e.target.value.indexOf('http://') === -1) {
         console.log(e.target.value)
         this.$message({
           message: '商品链接不正确请重新输入',
@@ -365,6 +365,14 @@ export default {
         })
         return
       }
+      // if (e.target.value.indexOf('.taobao.com') === -1) {
+      //   console.log(e.target.value)
+      //   this.$message({
+      //     message: '商品链接不正确请重新输入',
+      //     type: 'warning'
+      //   })
+      //   return
+      // }
     },
     copy(id) {
       const clipboard = new Clipboard('.copy-' + id)

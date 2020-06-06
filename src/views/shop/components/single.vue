@@ -145,11 +145,11 @@
           </el-select>
         </div>
         <button class="btn" @click="searchExpress()">搜索</button>
-        <button class="btn">导出</button>
+        <button class="btn" @click="exportExcel">导出</button>
       </div>
       <div class="od-title">获取快递单号前务必核对订单编号、收货信息、于下单地址是否一致</div>
       <ul class="order-list">
-        <!-- <li class="item">
+        <li v-for="itemdata in emptyList" class="item">
           <div class="dt">
             <div class="checkbox">
               <input type="checkbox" class="chk-ipt">
@@ -157,143 +157,62 @@
                 <span class="chk-in" />
               </span>
             </div>
-            <div class="one"> 任务ID：{{ emptyList.taskId }} </div>
-            <div class="one"> 订单ID：{{ emptyList.orderId }} </div>
-            <div class="one"> 店铺：{{ emptyList.storeName }} </div>
-            <div class="one"> 订单编号：{{ emptyList.orderNo }} </div>
-            <div class="one"> 付款时间：2018-07-06 11:28:52 </div>
+            <div class="one"> 任务ID：{{ itemdata.taskId }} </div>
+            <div class="one"> 订单ID：{{ itemdata.orderId }} </div>
+            <div class="one"> 店铺：{{ itemdata.storeName }} </div>
+            <div class="one"> 订单编号：{{ itemdata.thirdOrderNo }} </div>
+            <div class="one"> 付款时间：{{ itemdata.createTime }} </div>
           </div>
           <div class="dd">
             <div class="border first">发货信息</div>
             <div class="border flex1">
-              <div class="one"><span class="lb">发货人：</span><span class="sp">{{ senderName }} </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">{{ senderPhone }}</span></div>
-              <div class="one"><span class="lb">发货地址：</span><span class="sp">{{ senderProvince }} {{ senderCity }} {{ senderArea }}{{ senderAddress }} </span></div>
+              <div class="one"><span class="lb">发货人：</span><span class="sp">{{ itemdata.senderName }} </span></div>
+              <div class="one"><span class="lb">发货号码：</span><span class="sp">{{ itemdata.senderPhone }}</span></div>
+              <div class="one"><span class="lb">发货地址：</span><span class="sp">{{ itemdata.senderProvince }} {{ itemdata.senderCity }} {{ itemdata.senderArea }}{{ itemdata.senderAddress }} </span></div>
             </div>
             <div class="border last">
-              <span class="lb">会员名：</span><span class="sp">{{ nickname }} </span>
+              <span class="lb">会员名：</span><span class="sp">{{ itemdata.nickname }} </span>
             </div>
           </div>
           <div class="dd">
             <div class="border first">收货信息</div>
             <div class="border flex1">
-              <div class="one"><span class="lb">收货人：</span><span class="sp">{{ addresseeName }} </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">{{ addresseePhone }}</span></div>
-              <div class="one"><span class="lb">收货地址：</span><span class="sp">{{ addresseeProvince }}{{ addresseeCity }}{{ addresseeArea }}{{ addresseeAddress }}</span></div>
+              <div class="one"><span class="lb">收货人：</span><span class="sp">{{ itemdata.addresseeName }} </span></div>
+              <div class="one"><span class="lb">发货号码：</span><span class="sp">{{ itemdata.addresseePhone }}</span></div>
+              <div class="one"><span class="lb">收货地址：</span><span class="sp">{{ itemdata.addresseeProvince }}{{ itemdata.addresseeCity }}{{ itemdata.addresseeArea }}{{ itemdata.addresseeAddress }}</span></div>
             </div>
             <div class="border last">
-              <p class="main-txt">{{ expressNum }}</p>
+              <p class="main-txt">{{ itemdata.expressNum }}</p>
             </div>
           </div>
           <div class="dd">
             <div class="border first">快递信息</div>
-            <div class="border flexjsp">
-              <div class="one"><span class="lb">商品名称：</span><span class="sp">{{ goodsName }} </span></div>
-              <div class="one">
-                <span class="lb">快递：</span><select id="" name=""><option>  {{ courierCompanyName }}</option></select>
-                <span class="lb">重 </span><select id="" name=""><option>{{ weight }}</option></select> kg
+            <div class="border flexjsp" style="padding:0;">
+              <div class="one" style="width:380px;"><span class="lb">商品名称：</span><span class="sp">{{ itemdata.goodsName }} </span></div>
+              <div class="one" style="width:200px;">
+                <span class="lb">快递：</span>
+                <select
+                  v-model="itemdata.courierCompanyName"
+                  style="width:60px;height:20px;"
+                  @focus="toSelectYwCourierCompanyList(itemdata)"
+                  @blur="blurValue(itemdata)"
+                >
+                  <option v-if="(itemdata.remark === '已获取数据') ? false : true">
+                    {{ itemdata.courierCompanyName }}
+                  </option>
+                  <option
+                    v-for="items in kdList"
+                    :key="items.id"
+                    style="width:60px;height:20px;"
+                    :label="items.name"
+                    :value="items.id"
+                  />
+                </select>
+                <span class="lb">重 </span><input v-model="itemdata.weight" style="width:40px;" name=""> kg
               </div>
             </div>
-            <div class="border bdbtn" @click="toGetCourierOrderNo(item)">获取单号</div>
-            <div class="border bdbtn" @click="toUpdateCourier(item)">修改地址</div>
-          </div>
-        </li> -->
-        <li class="item">
-          <div class="dt">
-            <div class="checkbox">
-              <input type="checkbox" class="chk-ipt">
-              <span class="chk-out" style="margin-right:0">
-                <span class="chk-in" />
-              </span>
-            </div>
-            <div class="one"> 任务ID：1103546 </div>
-            <div class="one"> 订单ID：10243432 </div>
-            <div class="one"> 店铺：妮蔻旗舰店 </div>
-            <div class="one"> 订单编号：183529623024692184 </div>
-            <div class="one"> 付款时间：2018-07-06 11:28:52 </div>
-          </div>
-          <div class="dd">
-            <div class="border first">发货信息</div>
-            <div class="border flex1">
-              <div class="one"><span class="lb">发货人：</span><span class="sp">张三 </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">12345678910</span></div>
-              <div class="one"><span class="lb">发货地址：</span><span class="sp">安徽省合肥市蜀山区百草街126号 </span></div>
-            </div>
-            <div class="border last">
-              <span class="lb">会员名：</span><span class="sp">会飞的鱼 </span>
-            </div>
-          </div>
-          <div class="dd">
-            <div class="border first">收货信息</div>
-            <div class="border flex1">
-              <div class="one"><span class="lb">收货人：</span><span class="sp">李四 </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">12345678910</span></div>
-              <div class="one"><span class="lb">收货地址：</span><span class="sp">湖南省长沙市市望城区郭亮中路红建大厦1208 </span></div>
-            </div>
-            <div class="border last">
-              <p class="main-txt">12345678910</p>
-            </div>
-          </div>
-          <div class="dd">
-            <div class="border first">快递信息</div>
-            <div class="border flexjsp">
-              <div class="one"><span class="lb">商品名称：</span><span class="sp">百雀羚气韵化妆品水乳套装 </span></div>
-              <div class="one">
-                <span class="lb">快递：</span><select id="" name=""><option>  韵达快递</option></select>
-                <span class="lb">重 </span><select id="" name=""><option>1.2</option></select> kg
-              </div>
-            </div>
-            <div class="border bdbtn">获取单号</div>
-            <div class="border bdbtn">修改地址</div>
-          </div>
-        </li>
-        <li class="item">
-          <div class="dt">
-            <div class="checkbox">
-              <input type="checkbox" class="chk-ipt">
-              <span class="chk-out" style="margin-right:0">
-                <span class="chk-in" />
-              </span>
-            </div>
-            <div class="one"> 任务ID：1103546 </div>
-            <div class="one"> 订单ID：10243432 </div>
-            <div class="one"> 店铺：妮蔻旗舰店 </div>
-            <div class="one"> 订单编号：183529623024692184 </div>
-            <div class="one"> 付款时间：2018-07-06 11:28:52 </div>
-          </div>
-          <div class="dd">
-            <div class="border first">发货信息</div>
-            <div class="border flex1">
-              <div class="one"><span class="lb">发货人：</span><span class="sp">张三 </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">12345678910</span></div>
-              <div class="one"><span class="lb">发货地址：</span><span class="sp">安徽省合肥市蜀山区百草街126号 </span></div>
-            </div>
-            <div class="border last">
-              <span class="lb">会员名：</span><span class="sp">会飞的鱼 </span>
-            </div>
-          </div>
-          <div class="dd">
-            <div class="border first">收货信息</div>
-            <div class="border flex1">
-              <div class="one"><span class="lb">收货人：</span><span class="sp">李四 </span></div>
-              <div class="one"><span class="lb">发货号码：</span><span class="sp">12345678910</span></div>
-              <div class="one"><span class="lb">收货地址：</span><span class="sp">湖南省长沙市市望城区郭亮中路红建大厦1208 </span></div>
-            </div>
-            <div class="border last">
-              <p class="main-txt">12345678910</p>
-            </div>
-          </div>
-          <div class="dd">
-            <div class="border first">快递信息</div>
-            <div class="border flexjsp">
-              <div class="one"><span class="lb">商品名称：</span><span class="sp">百雀羚气韵化妆品水乳套装 </span></div>
-              <div class="one">
-                <span class="lb">快递：</span><select id="" name=""><option>  韵达快递</option></select>
-                <span class="lb">重 </span><select id="" name=""><option>1.2</option></select> kg
-              </div>
-            </div>
-            <div class="border bdbtn">获取单号</div>
-            <div class="border bdbtn">修改地址</div>
+            <div class="border bdbtn" @click="toGetCourierOrderNo(itemdata)">获取单号</div>
+            <div class="border bdbtn" @click="toUpdateCourier(itemdata)">修改地址</div>
           </div>
         </li>
       </ul>
@@ -314,6 +233,7 @@ import {
   selectYwGiftOrderDetaillList,
   exportYwGiftOrderDetaillList,
   selectYwOrderCourierList,
+  selectYwCourierCompanyList,
   updateCourier,
   selectYwCourierList,
   getCourierOrderNo
@@ -334,6 +254,7 @@ export default {
         value: 2,
         label: '未发货'
       }],
+      kdList: [],
       typeList: [{
         value: 0,
         label: '全部'
@@ -344,6 +265,7 @@ export default {
         value: 2,
         label: '空包代发'
       }],
+      courierCompanyData: true,
       queryList: {
         endTime: null,
         endTime1: null,
@@ -360,7 +282,7 @@ export default {
       pageIn: null,
       timeRange: [],
       timeRange2: [],
-
+      courierCompanyNames: null,
       emptyQueryList: {
         orderId: null,
         orderNo: null,
@@ -377,7 +299,7 @@ export default {
   },
   created() {
     this.init()
-    this.emptyInit()
+    // this.emptyInit()
   },
   methods: {
     init() {
@@ -385,15 +307,23 @@ export default {
         this.list = response.data.rows
         this.total = Math.ceil(response.data.total / this.queryList.pageSize)
       })
-    },
-    emptyInit() {
-      selectYwOrderCourierList(this.emptyQueryList).then(response => {
+      var data = { pageNum: this.emptyQueryList.pageNum, pageSize: this.emptyQueryList.pageSize }
+      selectYwCourierList(data).then(response => {
         this.emptyList = response.data.rows
-        console.log('经典的空包代发', this.emptyList)
-        console.log('经典的空包代发', response.data.rows)
+        console.log('补单空包数据', this.emptyList)
         this.emptyTotal = Math.ceil(response.data.total / this.emptyQueryList.pageSize)
       })
     },
+    // emptyInit() {
+    //   var data = { pageNum: this.emptyQueryList.pageNum, pageSize: this.emptyQueryList.pageSize }
+    //   selectYwOrderCourierList(data).then(response => {
+    //     this.emptyList = response.data
+    //     console.log('经典的空包代发', this.emptyList)
+    //     console.log('经典的空包代发', this.emptyQueryList)
+    //     console.log('经典的空包代发', response.data)
+    //     this.emptyTotal = Math.ceil(response.data.total / this.emptyQueryList.pageSize)
+    //   })
+    // },
     timeChange(val) {
       if (val === null) {
         this.queryList.startTime = null
@@ -436,6 +366,30 @@ export default {
       }
       this.init()
     },
+    // 所选快递显示
+    blurValue(data) {
+      // /
+      console.log('所选快递公司,把值和数据都获取火来', this.courierCompanyId)
+      // console.log('快递公司信息', this.courierCompanyName)
+      // console.log('快递公司信息s', this.courierCompanyNames)
+      // console.log('所选快递公司', this.courierCompanyId)
+    },
+    // 快递公司信息
+    toSelectYwCourierCompanyList(data, val) {
+      data.remark = '已获取数据'
+      var dataexp = {
+        storeTypeId: data.storeTypeId
+      }
+      console.log('快递公司信息', dataexp, val)
+      selectYwCourierCompanyList(dataexp).then(response => {
+        // console.log('快递公司信息123', response.data)
+        this.kdList = response.data
+        // this.$message({
+        //   message: '快递类型获取完成！',
+        //   type: 'success'
+        // })
+      })
+    },
     // 搜索
     searchExpress() {
       const searchButtom = {
@@ -462,6 +416,13 @@ export default {
     },
     // 获取快递单号
     toGetCourierOrderNo(item) {
+      var arrlist = this.kdList
+      for (var i = 0; i < arrlist.length; i++) {
+        if (arrlist[i].name === item.courierCompanyName) {
+          item.courierCompanyId = arrlist[i].id
+        }
+      }
+      console.log('所选快递公司,把值和数据都获取火来', item.courierCompanyId, item)
       const data = {
         addresseeAddress: item.addresseeAddress,
         addresseeArea: item.addresseeArea,
@@ -469,7 +430,7 @@ export default {
         addresseeName: item.addresseeName,
         addresseePhone: item.addresseePhone,
         addresseeProvince: item.addresseeProvince,
-        courierCompanyId: this.courierCompanyId,
+        courierCompanyId: item.courierCompanyName,
         goodsName: item.goodsName,
         id: item.id,
         senderAddress: item.senderAddress,
@@ -481,6 +442,7 @@ export default {
         thirdOrderNo: item.thirdOrderNo,
         weight: item.weight
       }
+      console.log('所选快递公司,把值和数据都获取火来', data)
       getCourierOrderNo(data).then(response => {
         if (response.code === 0) {
           this.expressNum = response.data.courierOrderNo
@@ -501,6 +463,81 @@ export default {
           })
         }
       })
+    },
+
+    // 导出
+    exportExcel() {
+      console.log('导出asd')
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].moneyType === 1) {
+          this.moneyTypedata = '收'
+        } else if (this.list[i].moneyType === 2) {
+          this.moneyTypedata = '支'
+        }
+      }
+      // excel数据导出
+      require.ensure([], () => {
+        const {
+          export_json_to_excel
+        } = require('../../../vendor/Export2Excel')
+        const tHeader = [
+          '序号',
+          '任务ID',
+          '订单ID',
+          '店铺',
+          '订单编号',
+          '付款时间',
+          '会员名称',
+          '单号',
+          '发货人',
+          '发货号码',
+          '发货省',
+          '发货市',
+          '发货区',
+          '发货具体地址',
+          '收货人',
+          '收货号码',
+          '收货省',
+          '收货市',
+          '收货区',
+          '收货具体地址',
+          '商品名称',
+          '快递',
+          '重量'
+        ]
+        const filterVal = [
+          'index',
+          'taskId',
+          'orderId',
+          'storeName',
+          'thirdOrderNo',
+          'createTime',
+          'nickname',
+          'expressNum',
+          'senderName',
+          'senderPhone',
+          'senderProvince',
+          'senderCity',
+          'senderArea',
+          'senderAddress',
+          'addresseeName',
+          'addresseePhone',
+          'addresseeProvince',
+          'addresseeCity',
+          'addresseeArea',
+          'addresseeAddress',
+          'goodsName',
+          'courierCompanyName',
+          'weight'
+        ]
+        const list = this.emptyList
+        const data = this.formatJson(filterVal, list)
+        export_json_to_excel(tHeader, data, '列表excel')
+      })
+    },
+    // 导出
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
     },
     handleExportYwGiftOrderDetaillList() {
       var data = Object.assign({}, this.queryList)
@@ -578,11 +615,14 @@ export default {
 .order-list .border.first{width: 80px;text-align: center;}
 .order-list .border.last{width: 146px}
 .order-list .border.flex1{flex:1;display: flex;}
-.order-list .border.flexjsp{flex:1;display: flex;justify-content: space-between}
+.order-list .border.flexjsp{flex:1;display: flex;justify-content: center}
 .order-list .one+.one{margin-left: 12px;}
 .order-list .lb{color:#97A8BE;}
 .order-list .sp{color:#bcbcbc}
 .order-list .bdbtn{padding:0;border:0; width: 72px; justify-content: center; color: white;background-color: #6666FF;box-sizing: border-box}
 .order-list .dd:nth-child(3) .sp{border-bottom: 1px solid #6666FF;}
 .order-list .dd:nth-child(3) .last{justify-content: center}
+/* .app-main .el-row .el-col-20 .page-load .order-list .item .dd .flexjsp .one .el-select--mini .el-input--suffix .el-input__inner{margin: 0;padding: 0;}
+.el-select-dropdown .el-scrollbar .el-select-dropdown__wrap .el-select-dropdown__list .el-select-dropdown__item{margin: 0;padding: 0;height: 30px;}
+.el-popper .el-scrollbar .el-scrollbar__wrap .el-select-dropdown__list .el-select-dropdown__item{margin: 0;padding: 0;height: 34px;} */
 </style>

@@ -1345,10 +1345,10 @@ export default {
         if (arrList[0].indexOf('store') !== -1) {
           arrStore = arrList[0].split('store=')
           numStore = arrStore[1].split('&')
-          idData = arrList[1]
+          idDatas = arrList[1]
         } else {
           arrStore = arrList[1].split('store=')
-          idData = arrStore[0].split('&')
+          idDatas = arrStore[0].split('&')
           numStore = arrStore[1]
         }
       }

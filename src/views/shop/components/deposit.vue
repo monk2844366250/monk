@@ -117,7 +117,7 @@
             <el-input v-model="addForm.money" class="form-block" type="text" placeholder="转账金额" maxlength="" @input="handleInputId2($event)" />
           </div>
           <div class="form-item">
-            <div class="form-required" />
+            <div class="form-required">*</div>
             <span class="form-label">转账截图</span>
             <div class="form-block">
               <el-upload
@@ -413,9 +413,17 @@ export default {
         })
         return
       }
+      if (!this.imageUrl) {
+        this.$message({
+          message: '请输入打款截图',
+          type: 'warning'
+        })
+        return
+      }
       this.submit()
     },
     submit() {
+      this.addForm.img = this.imageUrl
       var data = this.addForm
       addDeposit(data).then(response => {
         if (response.code === 0) {

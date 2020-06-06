@@ -306,6 +306,11 @@ export default {
                 type: 'success'
               })
               this.$router.push({ path: '/login' })
+            } else if (response.code === 301) {
+              this.$message({
+                message: response.msg,
+                type: 'warning'
+              })
             } else {
               this.$message({
                 message: response.msg,

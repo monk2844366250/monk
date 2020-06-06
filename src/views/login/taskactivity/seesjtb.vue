@@ -1344,8 +1344,6 @@ export default {
           numStore = arrStore[1]
         }
       }
-      console.log('idData', idDatas)
-      console.log('idData', idData)
       idData = idDatas[0]
       // var arrtest = arrList[1].split('taskTypeId=')
       console.log('type数据', arrList)

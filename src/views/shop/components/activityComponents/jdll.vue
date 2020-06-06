@@ -37,13 +37,14 @@
             style="margin-right: 20px;background-color: #F2F2F2;"
             class="avatar-uploader"
             :before-upload="function(file) {
-              return uploadImageShopChange(item-1)
+              return uploadImageShopChange((item-1), file)
             }"
             :http-request="uploadImage1"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
           >
-            <img v-if="form.taskGoodsList[item-1].img" :src="form.taskGoodsList[item-1].img" class="avatar">
+            <!-- <canvas v-if="form.taskGoodsList[item-1].img" id="myCanvas" style="width:100px;height:100px;position:absolute;top:0;left:0;z-index:999;">您的浏览器不支持Canvas</canvas> -->
+            <img v-show="form.taskGoodsList[item-1].img" v-if="form.taskGoodsList[item-1].img" id="productmainpicture" :src="form.taskGoodsList[item-1].img" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
           <i class="el-icon-circle-close avatar-uploader-remove" @click="removeMainImg(item)" />
@@ -859,7 +860,8 @@ export default {
       shopIndex: 0,
       hour24Data: [],
       goodsCategoryList: [],
-      cost: {}
+      cost: {},
+      imgbase64Url: null
     }
   },
   computed: {},
@@ -1009,11 +1011,11 @@ export default {
     handlePre() {
       this.$parent.handleNextOrPre(false)
     },
-    uploadImage1(e) {
-      this.form.taskGoodsList[this.shopIndex].img = uploadImage(e)
-    },
     uploadImageShopChange(index) {
       this.shopIndex = index
+    },
+    uploadImage1(e) {
+      this.form.taskGoodsList[this.shopIndex].img = uploadImage(e)
     },
     uploadImageBz1(e) {
       this.form.remarkImgUrl1 = uploadImage(e)
